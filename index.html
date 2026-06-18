@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حساب کتاب ورڑن 1.0</title>
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -43,7 +42,6 @@
             padding: 15px;
         }
 
-        /* Top Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -70,7 +68,6 @@
             gap: 5px;
         }
 
-        /* Dashboard Cards Grid */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -96,7 +93,6 @@
         .card h3 { font-size: 14px; margin-bottom: 5px; opacity: 0.8; color: var(--text-color); }
         .card .amount { font-size: 20px; font-weight: bold; }
 
-        /* Navigation Tabs */
         .tabs {
             display: flex;
             background-color: var(--card-bg);
@@ -124,7 +120,6 @@
             color: white;
         }
 
-        /* Forms and Sections */
         .section {
             background-color: var(--card-bg);
             border-radius: 12px;
@@ -167,7 +162,6 @@
             outline: none;
         }
 
-        /* Action Buttons */
         .btn-group {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -192,9 +186,8 @@
         .btn-income { background-color: #2e7d32; }
         .btn-expense { background-color: #c62828; }
         .btn-savings { background-color: #ef6c00; }
-        .btn-submit { background-color: var(--primary-color); width: 100%; }
+        .btn-submit { background-color: var(--primary-color); width: 100%; height: 45px; margin-top: 10px;}
 
-        /* History List Table style */
         .history-title {
             font-size: 16px;
             margin: 20px 0 10px 0;
@@ -213,8 +206,8 @@
             border-right: 5px solid #ccc;
         }
 
-        .item-details div { font-size: 15px; font-weight: bold; }
-        .item-details small { color: #888; font-size: 12px; }
+        .item-details div { font-size: 15px; font-weight: bold; text-align: right; }
+        .item-details small { color: #888; font-size: 12px; display: block; text-align: right; }
         
         .item-actions {
             display: flex;
@@ -223,10 +216,9 @@
         }
 
         .item-amount { font-weight: bold; font-size: 16px; }
-        .delete-btn { color: #c62828; cursor: pointer; background: none; border: none; font-size: 16px; }
-        .paid-btn { background-color: #2e7d32; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+        .delete-btn { color: #c62828; cursor: pointer; background: none; border: none; font-size: 16px; padding: 5px; }
+        .paid-btn { background-color: #2e7d32; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; font-weight: bold; }
 
-        /* Report Styles */
         .report-item {
             display: flex;
             justify-content: space-between;
@@ -238,7 +230,6 @@
 <body>
 
 <div class="container">
-    <!-- Header -->
     <div class="header">
         <h2>حساب کتاب ورڑن 1.0</h2>
         <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
@@ -246,7 +237,6 @@
         </button>
     </div>
 
-    <!-- Dashboard Grid -->
     <div class="dashboard-grid">
         <div class="card income">
             <h3>ٹوٹل آمدنی</h3>
@@ -270,14 +260,12 @@
         </div>
     </div>
 
-    <!-- Navigation Tabs -->
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('daily')">روزانہ کا حساب</button>
-        <button class="tab-btn" onclick="switchTab('udhaar')">ادھار لسٹ</button>
-        <button class="tab-btn" onclick="switchTab('report')">ماہانہ رپورٹ</button>
+        <button class="tab-btn active" id="tab-daily" onclick="switchTab('daily')">روزانہ کا حساب</button>
+        <button class="tab-btn" id="tab-udhaar" onclick="switchTab('udhaar')">ادھار لسٹ</button>
+        <button class="tab-btn" id="tab-report" onclick="switchTab('report')">ماہانہ رپورٹ</button>
     </div>
 
-    <!-- TAB 1: Daily Transactions -->
     <div id="dailySection" class="section active">
         <div class="section-title">آمدنی، خرچہ اور سیونگ درج کریں</div>
         
@@ -316,9 +304,7 @@
         <div class="history-title">آج کا لین دین کا ریکارڈ</div>
         <div id="dailyLogs"></div>
     </div>
-
-    <!-- TAB 2: Udhaar Section -->
-    <div id="udhaarSection" class="section">
+        <div id="udhaarSection" class="section">
         <div class="section-title">ادھار کھاتہ (لینا / دینا)</div>
         
         <div class="form-group">
@@ -347,7 +333,6 @@
         <div id="debtLogs"></div>
     </div>
 
-    <!-- TAB 3: Reports Section -->
     <div id="reportSection" class="section">
         <div class="section-title">ماہانہ خرچوں کی رپورٹ</div>
         <div id="reportLogs"></div>
@@ -397,7 +382,7 @@
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
         
-        event.target.classList.add('active');
+        document.getElementById('tab-' + tabName).classList.add('active');
         document.getElementById(tabName + 'Section').classList.add('active');
         
         if(tabName === 'report') {
@@ -417,7 +402,6 @@
             return;
         }
 
-        // اگر آمدنی یا سیونگ ہو تو کیٹیگری جنرل رکھ سکتے ہیں
         if(type !== 'expense') {
             category = type === 'income' ? 'آمدنی' : 'سیونگ گلاک';
         }
@@ -428,18 +412,16 @@
             amount,
             type,
             category,
-            desc: desc || type
+            desc: desc || (type === 'income' ? 'آمدنی' : type === 'expense' ? 'خرچہ' : 'سیونگ')
         };
 
         transactions.push(tx);
         saveAndRefresh();
         
-        // فارم کلیئر کرنا
         document.getElementById('txAmount').value = '';
         document.getElementById('txDesc').value = '';
     }
 
-    // Delete Main Transactions
     function deleteTx(id) {
         transactions = transactions.filter(t => t.id !== id);
         saveAndRefresh();
@@ -462,15 +444,11 @@
             date,
             name,
             amount,
-            type, // 'gave' or 'took'
+            type,
             status: 'pending'
         };
 
         debts.push(debt);
-        
-        // خان بھائی کے اصول کے مطابق: جب ادھار دیں تو وہ عارضی طور پر مین بیلنس سے مائنس ہوگا
-        // کیونکہ وہ ہماری جیب سے جا رہا ہے۔
-        
         localStorage.setItem('khaba_debts', JSON.stringify(debts));
         calculateEverything();
         
@@ -478,15 +456,13 @@
         document.getElementById('debtAmount').value = '';
     }
 
-    // Settle Udhaar (خان بھائی لاجک آٹومیٹک لنکڈ)
+    // Settle Udhaar
     function settleDebt(id) {
         const debtIndex = debts.findIndex(d => d.id === id);
         if(debtIndex > -1) {
             const debt = debts[debtIndex];
             
-            // آٹومیٹک مین اکاؤنٹ میں منتقلی
             if(debt.type === 'gave') {
-                // ادھار واپس ملا یعنی آمدنی ہو گئی خود بخود
                 transactions.push({
                     id: Date.now(),
                     date: new Date().toISOString().split('T')[0],
@@ -496,7 +472,6 @@
                     desc: `${debt.name} سے ادھار واپس ملا`
                 });
             } else if(debt.type === 'took') {
-                // لیا ہوا ادھار پیڈ کیا یعنی جیب سے خرچہ ہو گیا
                 transactions.push({
                     id: Date.now(),
                     date: new Date().toISOString().split('T')[0],
@@ -507,7 +482,6 @@
                 });
             }
 
-            // لسٹ سے حذف کرنا یا اسٹیٹس بدلنا (ہم لسٹ سے صاف کر رہے ہیں)
             debts.splice(debtIndex, 1);
             
             localStorage.setItem('khaba_tx', JSON.stringify(transactions));
@@ -537,9 +511,8 @@
             if(t.type === 'savings') sav += t.amount;
         });
 
-        // ادھار کا حساب (کتنے لینے ہیں اور کتنے دینے ہیں)
-        let debtGave = 0; // جو لوگوں کو دیا (لینا ہے +)
-        let debtTook = 0; // جو لوگوں سے لیا (دینا ہے -)
+        let debtGave = 0;
+        let debtTook = 0;
         
         debts.forEach(d => {
             if(d.type === 'gave') debtGave += d.amount;
@@ -547,11 +520,8 @@
         });
 
         let netDebt = debtGave - debtTook;
-
-        // فارمولا: فائنل اویلیبل بیلنس
         let bal = inc - exp - sav;
 
-        // اسکرین پر دکھانا
         document.getElementById('totalIncome').innerText = inc.toLocaleString();
         document.getElementById('totalExpense').innerText = exp.toLocaleString();
         document.getElementById('totalSavings').innerText = sav.toLocaleString();
@@ -562,7 +532,6 @@
         renderDebtLogs();
     }
 
-    // Render Daily Logs List
     function renderDailyLogs() {
         const logsDiv = document.getElementById('dailyLogs');
         logsDiv.innerHTML = '';
@@ -572,7 +541,6 @@
             return;
         }
 
-        // الٹی ترتیب (نیا ریکارڈ سب سے اوپر)
         [...transactions].reverse().forEach(t => {
             let color = '#2e7d32';
             if(t.type === 'expense') color = '#c62828';
@@ -583,4 +551,79 @@
                     <div class="item-details">
                         <div>${t.desc}</div>
                         <small>${t.date} | ${t.category}</small>
-                    </div
+                    </div>
+                    <div class="item-actions">
+                        <span class="item-amount" style="color: ${color}">${t.type === 'expense' ? '-' : '+'}${t.amount}</span>
+                        <button class="delete-btn" onclick="deleteTx(${t.id})"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function renderDebtLogs() {
+        const debtDiv = document.getElementById('debtLogs');
+        debtDiv.innerHTML = '';
+
+        if(debts.length === 0) {
+            debtDiv.innerHTML = '<p style="text-align:center; padding:15px; opacity:0.6;">کوئی ادھار باقی نہیں ہے!</p>';
+            return;
+        }
+
+        [...debts].reverse().forEach(d => {
+            const isGave = d.type === 'gave';
+            const color = isGave ? '#6a1b9a' : '#303f9f';
+            const typeText = isGave ? 'ادھار دیا (لینے ہیں)' : 'ادھار لیا (دینے ہیں)';
+
+            debtDiv.innerHTML += `
+                <div class="list-item" style="border-right-color: ${color}">
+                    <div class="item-details">
+                        <div>${d.name} <span style="font-size:12px; color:${color}; font-weight:normal;">(${typeText})</span></div>
+                        <small>${d.date}</small>
+                    </div>
+                    <div class="item-actions">
+                        <span class="item-amount" style="color: ${color}">Rs ${d.amount}</span>
+                        <button class="paid-btn" onclick="settleDebt(${d.id})">کھاتہ صاف کریں</button>
+                        <button class="delete-btn" onclick="deleteDebtDirect(${d.id})"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function generateReport() {
+        const reportDiv = document.getElementById('reportLogs');
+        reportDiv.innerHTML = '';
+
+        let categoryTotals = {};
+        let totalExp = 0;
+
+        transactions.forEach(t => {
+            if(t.type === 'expense') {
+                categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
+                totalExp += t.amount;
+            }
+        });
+
+        if(totalExp === 0) {
+            reportDiv.innerHTML = '<p style="text-align:center; padding:15px; opacity:0.6;">رپورٹ کے لیے کوئی خرچے کا ریکارڈ نہیں ملا۔</p>';
+            return;
+        }
+
+        reportDiv.innerHTML += `<p style="margin-bottom:15px; font-weight:bold;">کل خرچہ باقاعدہ کیٹیگری وائز:</p>`;
+
+        for(let cat in categoryTotals) {
+            let amt = categoryTotals[cat];
+            let percentage = ((amt / totalExp) * 100).toFixed(1);
+            reportDiv.innerHTML += `
+                <div class="report-item">
+                    <span>${cat}</span>
+                    <span><b>Rs ${amt}</b> (${percentage}%)</span>
+                </div>
+            `;
+        }
+    }
+</script>
+
+</body>
+</html>
