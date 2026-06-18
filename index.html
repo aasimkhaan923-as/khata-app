@@ -158,8 +158,6 @@
             font-size: 15px;
         }
 
-        select.input-box { cursor: pointer; }
-
         .btn-row {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -213,11 +211,13 @@
 </head>
 <body class="dark-mode">
 
+    <!-- ٹاپ بار -->
     <div class="top-bar">
         <div class="title-text">حساب کتاب ورژن 1.1</div>
         <button class="theme-btn" onclick="toggleTheme()">🌙 نائٹ موڈ</button>
     </div>
 
+    <!-- اسٹیٹس کارڈز -->
     <div class="stats-grid">
         <div class="stat-card card-expense">
             <p>ٹوٹل خرچہ</p>
@@ -237,14 +237,17 @@
         </div>
     </div>
 
+    <!-- مینیو ٹیبس -->
     <div class="tabs-container">
         <button class="tab-btn active" id="btnTab1" onclick="switchTab(1)">روزانہ کا حساب</button>
         <button class="tab-btn" id="btnTab2" onclick="switchTab(2)">ادھار کھاتا</button>
         <button class="tab-btn" id="btnTab3" onclick="switchTab(3)">ماہانہ رپورٹ</button>
     </div>
 
+    <!-- مین مواد والا باکس -->
     <div class="main-content">
         
+        <!-- پیج 1: روزانہ کا حساب -->
         <div id="page1" class="page active">
             <div class="form-title">آمدنی، خرچہ اور سیونگ درج کریں</div>
             <input type="number" id="txtAmount" class="input-box" placeholder="رقم درج کریں (روپے)">
@@ -267,6 +270,7 @@
             <div class="data-list" id="dailyLogList"></div>
         </div>
 
+        <!-- پیج 2: ادھار کھاتا -->
         <div id="page2" class="page">
             <div class="form-title">👤 ادھار اور لیجر ریکارڈز</div>
             
@@ -278,8 +282,8 @@
             <input type="text" id="txtKhataName" class="input-box" placeholder="بندے کا نام">
             <input type="number" id="txtKhataAmount" class="input-box" placeholder="ادھار رقم">
             <select id="ddlKhataType" class="input-box">
-                <option value="lena">میں نے رقم لینی ہے (وصولی)</option>
-                <option value="dena">میں نے رقم دینی ہے (ادائیگی)</option>
+                <option value="dena">میں نے رقم دینی ہے (ادائیگی / مائنس ہو جائے)</option>
+                <option value="lena">میں نے رقم لینی ہے (وصولی / جمع ہو جائے)</option>
             </select>
 
             <button class="action-btn" style="width:100%; background-color:#3b82f6;" onclick="addKhataRecord()">ادھار محفوظ کریں</button>
@@ -288,22 +292,21 @@
             <div class="data-list" id="khataLogList"></div>
         </div>
 
+        <!-- پیج 3: ماہانہ رپورٹ -->
         <div id="page3" class="page">
             <div class="form-title">📊 مجموعی رپورٹ اور ڈیٹا کلیئرنس</div>
-            <p style="text-align:center; margin: 20px 0; font-size:15px;">یہاں آپ کا پورا ریکارڈ محفوظ رہتا ہے۔ ضرورت پڑنے پر آپ اسے ری سیٹ کر سکتے ہیں۔</p>
+            <p style="text-align:center; margin: 20px 0; font-size:15px;">یہاں آپ کا پورا ریکارڈ محفوظ رہتا ہے۔ ضرورت پڑنے پر آپ اسے ری سیٹ کر سکتےflags۔</p>
             <button class="action-btn" style="width:100%; background-color:#ef4444; padding:12px;" onclick="clearAllData()">⚠️ تمام ڈیٹا ڈیلیٹ کریں (ری سیٹ)</button>
         </div>
 
     </div>
 
     <script>
-        // لوکل ڈیٹا لوڈنگ
         let appData = JSON.parse(localStorage.getItem('master_data')) || {
             income: 0, expense: 0, savings: 0,
             dailyLogs: [], khataLogs: []
         };
 
-        // پیج لوڈ پر رینڈرنگ
         updateUI();
 
         function toggleTheme() {
@@ -341,12 +344,12 @@
 
             if(name === "" || isNaN(amt) || amt <= 0) return;
 
-            // آٹو اپڈیٹ والا جادو: اگر ادھار لیا/دیا تو مین بیلنس پر اثر پڑے
-            if(type === 'lena') {
-                // ادھار وصول ہوا یا کسی کو دیا (یہاں ہم فرض کر رہے ہیں کہ ادھار دینے سے نقد رقم کم ہوئی)
+            // عاصم بھائی کا فکسڈ فارمولا:
+            if(type === 'dena') {
+                // اگر آپ نے کسی کو ادھار دے دیا (رقم دینی پڑ گئی جیب سے)، تو یہ آمدنی سے مائنس (یعنی خرچے میں پلس) ہوگا
                 appData.expense += amt; 
             } else {
-                // کسی سے ادھار لیا تو نقد رقم پاس آئی
+                // اگر ادھار واپس مل گیا (رقم لینی تھی اور وصول ہو گئی)، تو یہ آمدنی میں پلس ہو جائے گا
                 appData.income += amt;
             }
 
@@ -359,11 +362,11 @@
 
         function deleteKhata(index) {
             let record = appData.khataLogs[index];
-            // ریورس اثر اگر لسٹ سے ادھار ختم کریں
-            if(record.type === 'lena') {
-                appData.income += record.amount;
+            // ڈیلیٹ کرنے پر حساب کو واپس اصلی حالت میں لانا
+            if(record.type === 'dena') {
+                appData.expense -= record.amount;
             } else {
-                appData.expense += record.amount;
+                appData.income -= record.amount;
             }
             appData.khataLogs.splice(index, 1);
             saveAndRefresh();
@@ -382,7 +385,6 @@
             document.getElementById('lblSavings').innerText = "Rs " + appData.savings;
             document.getElementById('lblBalance').innerText = "Rs " + balance;
 
-            // ڈیلی لاگ رینڈرنگ
             let dailyHtml = "";
             appData.dailyLogs.slice().reverse().forEach(log => {
                 let color = log.type === 'income' ? '#10b981' : (log.type === 'expense' ? '#ef4444' : '#f59e0b');
@@ -391,7 +393,6 @@
             });
             document.getElementById('dailyLogList').innerHTML = dailyHtml;
 
-            // ادھار کھاتا رینڈرنگ اور ٹوٹلنگ
             let totalLena = 0;
             let totalDena = 0;
             let khataHtml = "";
@@ -400,7 +401,7 @@
                 if(khata.type === 'lena') totalLena += khata.amount;
                 else totalDena += khata.amount;
 
-                let typeText = khata.type === 'lena' ? 'لینا ہے 🟢' : 'دینا ہے 🔴';
+                let typeText = khata.type === 'lena' ? 'لینا ہے (وصولی) 🟢' : 'دینا ہے (ادائیگی) 🔴';
                 let amtColor = khata.type === 'lena' ? '#10b981' : '#ef4444';
 
                 khataHtml += `<div class="data-item">
