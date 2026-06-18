@@ -7,229 +7,422 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Urdu:wght@400;700&display=swap');
         
+        :root {
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --primary-blue: #1e3a8a;
+        }
+
+        .dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e5e7eb;
+            --primary-blue: #3b82f6;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Noto Sans Urdu', sans-serif;
+            transition: background 0.3s, color 0.3s;
         }
 
         body {
-            background-color: #121212;
-            color: #e5e7eb;
-            padding: 15px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .header {
+        .top-bar {
             width: 100%;
             max-width: 500px;
-            text-align: center;
-            padding: 20px 0;
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        .header h1 {
-            font-size: 24px;
-            color: #fff;
-        }
-
-        .main-box {
-            width: 100%;
-            max-width: 500px;
-            background-color: #1e1e1e;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            margin-bottom: 15px;
-        }
-
-        .balance-card {
-            background-color: #2d2d2d;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 15px;
-            border-left: 5px solid #10b981;
-        }
-
-        .balance-card h2 {
-            font-size: 18px;
-            color: #9ca3af;
-        }
-
-        .balance-card .amount {
-            font-size: 28px;
-            font-weight: bold;
-            color: #10b981;
-            margin-top: 5px;
-        }
-
-        .input-group {
-            margin-bottom: 12px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #9ca3af;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            background-color: #2d2d2d;
-            border: 1px solid #4b5563;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 16px;
-            text-align: center;
-        }
-
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        button {
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            color: white;
-            transition: 0.2s;
-        }
-
-        .btn-income { background-color: #10b981; }
-        .btn-income:hover { background-color: #059669; }
-
-        .btn-expense { background-color: #ef4444; }
-        .btn-expense:hover { background-color: #dc2626; }
-
-        .khata-section {
-            width: 100%;
-            max-width: 500px;
-            background-color: #1e1e1e;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-
-        .khata-list {
-            margin-top: 15px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .khata-item {
-            background-color: #2d2d2d;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 15px;
         }
+
+        .title-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .theme-btn {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .dark-mode .theme-btn {
+            background-color: #facc15;
+            color: #121212;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-top: 4px solid #ccc;
+        }
+
+        .card-expense { border-top-color: #ef4444; }
+        .card-income { border-top-color: #10b981; }
+        .card-balance { border-top-color: #3b82f6; }
+        .card-savings { border-top-color: #f59e0b; }
+
+        .stat-card p { font-size: 13px; color: #6b7280; }
+        .dark-mode .stat-card p { color: #9ca3af; }
+        .stat-card .amount { font-size: 20px; font-weight: bold; margin-top: 5px; }
+
+        .tabs-container {
+            display: flex;
+            width: 100%;
+            max-width: 500px;
+            background-color: #d1d5db;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .dark-mode .tabs-container { background-color: #2d2d2d; }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: bold;
+            color: #4b5563;
+            cursor: pointer;
+        }
+
+        .dark-mode .tab-btn { color: #9ca3af; }
+
+        .tab-btn.active {
+            background-color: #1e3a8a;
+            color: white;
+        }
+        .dark-mode .tab-btn.active { background-color: #3b82f6; color: #121212; }
+
+        .main-content {
+            width: 100%;
+            max-width: 500px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+        }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        .form-title {
+            text-align: center;
+            font-size: 18px;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+        }
+
+        .input-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 15px;
+        }
+
+        select.input-box { cursor: pointer; }
+
+        .btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+
+        .list-header {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        .data-list {
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--bg-color);
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .udhar-totals {
+            display: flex;
+            justify-content: space-between;
+            background: #e2e8f0;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #121212;
+        }
+        .dark-mode .udhar-totals { background: #2d2d2d; color: #fff; }
     </style>
 </head>
-<body>
+<body class="dark-mode">
 
-    <div class="header">
-        <h1>Savings Master - حساب کتاب</h1>
+    <div class="top-bar">
+        <div class="title-text">حساب کتاب ورژن 1.1</div>
+        <button class="theme-btn" onclick="toggleTheme()">🌙 نائٹ موڈ</button>
     </div>
 
-    <!-- حساب کتاب سیکشن -->
-    <div class="main-box">
-        <div class="balance-card">
-            <h2>کل موجودہ رقم (بچت)</h2>
-            <div class="amount" id="totalSavings">0 روپے</div>
+    <div class="stats-grid">
+        <div class="stat-card card-expense">
+            <p>ٹوٹل خرچہ</p>
+            <div class="amount" id="lblExpense" style="color: #ef4444;">Rs 0</div>
         </div>
-
-        <div class="input-group">
-            <label>رقم درج کریں (روپے)</label>
-            <input type="number" id="mainAmount" placeholder="0.00">
+        <div class="stat-card card-income">
+            <p>ٹوٹل آمدنی</p>
+            <div class="amount" id="lblIncome" style="color: #10b981;">Rs 0</div>
         </div>
-
-        <div class="btn-grid">
-            <button class="btn-income" onclick="addIncome()">آمدنی پلس کریں</button>
-            <button class="btn-expense" onclick="addExpense()">خرچہ مائنس کریں</button>
+        <div class="stat-card card-balance">
+            <p>باقی رقم (بیلنس)</p>
+            <div class="amount" id="lblBalance" style="color: #3b82f6;">Rs 0</div>
+        </div>
+        <div class="stat-card card-savings">
+            <p>سیونگ گلاک 💰</p>
+            <div class="amount" id="lblSavings" style="color: #f59e0b;">Rs 0</div>
         </div>
     </div>
 
-    <!-- ادھار کھاتا سیکشن -->
-    <div class="khata-section">
-        <h3>👤 ادھار کھاتا (لیجر)</h3>
-        <div class="input-group" style="margin-top: 10px;">
-            <input type="text" id="khataName" placeholder="بندے کا نام">
-        </div>
-        <div class="input-group">
-            <input type="number" id="khataAmount" placeholder="ادھار رقم">
-        </div>
-        <button class="btn-income" style="width: 100%; background-color: #3b82f6;" onclick="saveKhata()">ادھار ریکارڈ کریں</button>
+    <div class="tabs-container">
+        <button class="tab-btn active" id="btnTab1" onclick="switchTab(1)">روزانہ کا حساب</button>
+        <button class="tab-btn" id="btnTab2" onclick="switchTab(2)">ادھار کھاتا</button>
+        <button class="tab-btn" id="btnTab3" onclick="switchTab(3)">ماہانہ رپورٹ</button>
+    </div>
 
-        <div class="khata-list" id="khataList">
-            <!-- یہاں ادھار کی لسٹ آئے گی -->
+    <div class="main-content">
+        
+        <div id="page1" class="page active">
+            <div class="form-title">آمدنی، خرچہ اور سیونگ درج کریں</div>
+            <input type="number" id="txtAmount" class="input-box" placeholder="رقم درج کریں (روپے)">
+            <select id="ddlCategory" class="input-box">
+                <option value="عمومی">کیٹیگری منتخب کریں (اختیاری)</option>
+                <option value="پٹرول / بائیک">پٹرول / بائیک ⛽</option>
+                <option value="گھر کا راشن">گھر کا راشن 🛒</option>
+                <option value="صحت / دوائی">صحت / دوائی 💊</option>
+                <option value="موبائل لوڈ">موبائل لوڈ 📱</option>
+            </select>
+            <input type="text" id="txtDetails" class="input-box" placeholder="تفصیل / کام کا نام (اختیاری)">
+            
+            <div class="btn-row">
+                <button class="action-btn" style="background-color: #10b981;" onclick="doTransaction('income')">➕ آمدنی</button>
+                <button class="action-btn" style="background-color: #ef4444;" onclick="doTransaction('expense')">➖ خرچہ</button>
+                <button class="action-btn" style="background-color: #f59e0b;" onclick="doTransaction('savings')">💰 سیونگ</button>
+            </div>
+
+            <div class="list-header">آج کا لین دین کا ریکارڈ:</div>
+            <div class="data-list" id="dailyLogList"></div>
         </div>
+
+        <div id="page2" class="page">
+            <div class="form-title">👤 ادھار اور لیجر ریکارڈز</div>
+            
+            <div class="udhar-totals">
+                <span style="color: #10b981;">ٹوٹل لینا ہے: <span id="lblTotalLena">0</span></span>
+                <span style="color: #ef4444;">ٹوٹل دینا ہے: <span id="lblTotalDena">0</span></span>
+            </div>
+
+            <input type="text" id="txtKhataName" class="input-box" placeholder="بندے کا نام">
+            <input type="number" id="txtKhataAmount" class="input-box" placeholder="ادھار رقم">
+            <select id="ddlKhataType" class="input-box">
+                <option value="lena">میں نے رقم لینی ہے (وصولی)</option>
+                <option value="dena">میں نے رقم دینی ہے (ادائیگی)</option>
+            </select>
+
+            <button class="action-btn" style="width:100%; background-color:#3b82f6;" onclick="addKhataRecord()">ادھار محفوظ کریں</button>
+
+            <div class="list-header">ادھار لینے/دینے والوں کی لسٹ:</div>
+            <div class="data-list" id="khataLogList"></div>
+        </div>
+
+        <div id="page3" class="page">
+            <div class="form-title">📊 مجموعی رپورٹ اور ڈیٹا کلیئرنس</div>
+            <p style="text-align:center; margin: 20px 0; font-size:15px;">یہاں آپ کا پورا ریکارڈ محفوظ رہتا ہے۔ ضرورت پڑنے پر آپ اسے ری سیٹ کر سکتے ہیں۔</p>
+            <button class="action-btn" style="width:100%; background-color:#ef4444; padding:12px;" onclick="clearAllData()">⚠️ تمام ڈیٹا ڈیلیٹ کریں (ری سیٹ)</button>
+        </div>
+
     </div>
 
     <script>
-        // لوکل اسٹوریج سے پرانا ڈیٹا اٹھانا
-        let savings = parseFloat(localStorage.getItem('savings')) || 0;
-        let khataRecords = JSON.parse(localStorage.getItem('khataRecords')) || [];
+        // لوکل ڈیٹا لوڈنگ
+        let appData = JSON.parse(localStorage.getItem('master_data')) || {
+            income: 0, expense: 0, savings: 0,
+            dailyLogs: [], khataLogs: []
+        };
 
-        document.getElementById('totalSavings').innerText = savings + " روپے";
-        updateKhataUI();
+        // پیج لوڈ پر رینڈرنگ
+        updateUI();
 
-        function addIncome() {
-            let amt = parseFloat(document.getElementById('mainAmount').value);
-            if(amt > 0) {
-                savings += amt;
-                saveToStorage();
-            }
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            let isDark = document.body.classList.contains('dark-mode');
+            document.querySelector('.theme-btn').innerText = isDark ? "🌙 نائٹ موڈ" : "☀️ ڈے موڈ";
         }
 
-        function addExpense() {
-            let amt = parseFloat(document.getElementById('mainAmount').value);
-            if(amt > 0) {
-                savings -= amt;
-                saveToStorage();
-            }
+        function switchTab(tabNum) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('btnTab' + tabNum).classList.add('active');
+            document.getElementById('page' + tabNum).classList.add('active');
         }
 
-        function saveKhata() {
-            let name = document.getElementById('khataName').value.trim();
-            let amt = document.getElementById('khataAmount').value;
-            if(name !== "" && amt > 0) {
-                khataRecords.push({name: name, amount: amt});
-                localStorage.setItem('khataRecords', JSON.stringify(khataRecords));
-                updateKhataUI();
-                document.getElementById('khataName').value = "";
-                document.getElementById('khataAmount').value = "";
-            }
+        function doTransaction(type) {
+            let amt = parseFloat(document.getElementById('txtAmount').value);
+            let cat = document.getElementById('ddlCategory').value;
+            let det = document.getElementById('txtDetails').value.trim() || "عمومی ریکارڈ";
+            
+            if(isNaN(amt) || amt <= 0) return;
+
+            appData[type] += amt;
+            appData.dailyLogs.push({ type: type, amount: amt, category: cat, details: det });
+            
+            saveAndRefresh();
+            document.getElementById('txtAmount').value = "";
+            document.getElementById('txtDetails').value = "";
         }
 
-        function updateKhataUI() {
-            let listHtml = "";
-            khataRecords.forEach((item, index) => {
-                listHtml += `<div class="khata-item"><span>${item.name}</span><span style="color:#ef4444;">${item.amount} روپے</span></div>`;
+        function addKhataRecord() {
+            let name = document.getElementById('txtKhataName').value.trim();
+            let amt = parseFloat(document.getElementById('txtKhataAmount').value);
+            let type = document.getElementById('ddlKhataType').value;
+
+            if(name === "" || isNaN(amt) || amt <= 0) return;
+
+            // آٹو اپڈیٹ والا جادو: اگر ادھار لیا/دیا تو مین بیلنس پر اثر پڑے
+            if(type === 'lena') {
+                // ادھار وصول ہوا یا کسی کو دیا (یہاں ہم فرض کر رہے ہیں کہ ادھار دینے سے نقد رقم کم ہوئی)
+                appData.expense += amt; 
+            } else {
+                // کسی سے ادھار لیا تو نقد رقم پاس آئی
+                appData.income += amt;
+            }
+
+            appData.khataLogs.push({ name: name, amount: amt, type: type });
+            saveAndRefresh();
+
+            document.getElementById('txtKhataName').value = "";
+            document.getElementById('txtKhataAmount').value = "";
+        }
+
+        function deleteKhata(index) {
+            let record = appData.khataLogs[index];
+            // ریورس اثر اگر لسٹ سے ادھار ختم کریں
+            if(record.type === 'lena') {
+                appData.income += record.amount;
+            } else {
+                appData.expense += record.amount;
+            }
+            appData.khataLogs.splice(index, 1);
+            saveAndRefresh();
+        }
+
+        function saveAndRefresh() {
+            localStorage.setItem('master_data', JSON.stringify(appData));
+            updateUI();
+        }
+
+        function updateUI() {
+            let balance = appData.income - appData.expense - appData.savings;
+            
+            document.getElementById('lblIncome').innerText = "Rs " + appData.income;
+            document.getElementById('lblExpense').innerText = "Rs " + appData.expense;
+            document.getElementById('lblSavings').innerText = "Rs " + appData.savings;
+            document.getElementById('lblBalance').innerText = "Rs " + balance;
+
+            // ڈیلی لاگ رینڈرنگ
+            let dailyHtml = "";
+            appData.dailyLogs.slice().reverse().forEach(log => {
+                let color = log.type === 'income' ? '#10b981' : (log.type === 'expense' ? '#ef4444' : '#f59e0b');
+                let sign = log.type === 'income' ? '➕' : '➖';
+                dailyHtml += `<div class="data-item"><span>${sign} ${log.details} (${log.category})</span><span style="color:${color}; font-weight:bold;">Rs ${log.amount}</span></div>`;
             });
-            document.getElementById('khataList').innerHTML = listHtml;
+            document.getElementById('dailyLogList').innerHTML = dailyHtml;
+
+            // ادھار کھاتا رینڈرنگ اور ٹوٹلنگ
+            let totalLena = 0;
+            let totalDena = 0;
+            let khataHtml = "";
+
+            appData.khataLogs.forEach((khata, idx) => {
+                if(khata.type === 'lena') totalLena += khata.amount;
+                else totalDena += khata.amount;
+
+                let typeText = khata.type === 'lena' ? 'لینا ہے 🟢' : 'دینا ہے 🔴';
+                let amtColor = khata.type === 'lena' ? '#10b981' : '#ef4444';
+
+                khataHtml += `<div class="data-item">
+                    <span><strong>${khata.name}</strong> (${typeText})</span>
+                    <div>
+                        <span style="color:${amtColor}; font-weight:bold; margin-left:10px;">Rs ${khata.amount}</span>
+                        <button onclick="deleteKhata(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:12px;">❌</button>
+                    </div>
+                </div>`;
+            });
+
+            document.getElementById('lblTotalLena').innerText = "Rs " + totalLena;
+            document.getElementById('lblTotalDena').innerText = "Rs " + totalDena;
+            document.getElementById('khataLogList').innerHTML = khataHtml;
         }
 
-        function saveToStorage() {
-            localStorage.setItem('savings', savings);
-            document.getElementById('totalSavings').innerText = savings + " روپے";
-            document.getElementById('mainAmount').value = "";
+        function clearAllData() {
+            if(confirm("کیا آپ واقعی سارا حساب کتاب ڈیلیٹ کرنا چاہتے ہیں؟")) {
+                appData = { income: 0, expense: 0, savings: 0, dailyLogs: [], khataLogs: [] };
+                saveAndRefresh();
+                alert("تمام ڈیٹا صاف کر دیا گیا ہے!");
+            }
         }
     </script>
 </body>
