@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب کتاب ورژن 1.1</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Urdu:wght@400;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans Urdu', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #e5e7eb;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .main-box {
+            width: 100%;
+            max-width: 500px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+        }
+
+        .balance-card {
+            background-color: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+            border-left: 5px solid #10b981;
+        }
+
+        .balance-card h2 {
+            font-size: 18px;
+            color: #9ca3af;
+        }
+
+        .balance-card .amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #10b981;
+            margin-top: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: #2d2d2d;
+            border: 1px solid #4b5563;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .btn-income { background-color: #10b981; }
+        .btn-income:hover { background-color: #059669; }
+
+        .btn-expense { background-color: #ef4444; }
+        .btn-expense:hover { background-color: #dc2626; }
+
+        .khata-section {
+            width: 100%;
+            max-width: 500px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .khata-list {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .khata-item {
+            background-color: #2d2d2d;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Savings Master - حساب کتاب</h1>
+    </div>
+
+    <!-- حساب کتاب سیکشن -->
+    <div class="main-box">
+        <div class="balance-card">
+            <h2>کل موجودہ رقم (بچت)</h2>
+            <div class="amount" id="totalSavings">0 روپے</div>
+        </div>
+
+        <div class="input-group">
+            <label>رقم درج کریں (روپے)</label>
+            <input type="number" id="mainAmount" placeholder="0.00">
+        </div>
+
+        <div class="btn-grid">
+            <button class="btn-income" onclick="addIncome()">آمدنی پلس کریں</button>
+            <button class="btn-expense" onclick="addExpense()">خرچہ مائنس کریں</button>
+        </div>
+    </div>
+
+    <!-- ادھار کھاتا سیکشن -->
+    <div class="khata-section">
+        <h3>👤 ادھار کھاتا (لیجر)</h3>
+        <div class="input-group" style="margin-top: 10px;">
+            <input type="text" id="khataName" placeholder="بندے کا نام">
+        </div>
+        <div class="input-group">
+            <input type="number" id="khataAmount" placeholder="ادھار رقم">
+        </div>
+        <button class="btn-income" style="width: 100%; background-color: #3b82f6;" onclick="saveKhata()">ادھار ریکارڈ کریں</button>
+
+        <div class="khata-list" id="khataList">
+            <!-- یہاں ادھار کی لسٹ آئے گی -->
+        </div>
+    </div>
+
+    <script>
+        // لوکل اسٹوریج سے پرانا ڈیٹا اٹھانا
+        let savings = parseFloat(localStorage.getItem('savings')) || 0;
+        let khataRecords = JSON.parse(localStorage.getItem('khataRecords')) || [];
+
+        document.getElementById('totalSavings').innerText = savings + " روپے";
+        updateKhataUI();
+
+        function addIncome() {
+            let amt = parseFloat(document.getElementById('mainAmount').value);
+            if(amt > 0) {
+                savings += amt;
+                saveToStorage();
+            }
+        }
+
+        function addExpense() {
+            let amt = parseFloat(document.getElementById('mainAmount').value);
+            if(amt > 0) {
+                savings -= amt;
+                saveToStorage();
+            }
+        }
+
+        function saveKhata() {
+            let name = document.getElementById('khataName').value.trim();
+            let amt = document.getElementById('khataAmount').value;
+            if(name !== "" && amt > 0) {
+                khataRecords.push({name: name, amount: amt});
+                localStorage.setItem('khataRecords', JSON.stringify(khataRecords));
+                updateKhataUI();
+                document.getElementById('khataName').value = "";
+                document.getElementById('khataAmount').value = "";
+            }
+        }
+
+        function updateKhataUI() {
+            let listHtml = "";
+            khataRecords.forEach((item, index) => {
+                listHtml += `<div class="khata-item"><span>${item.name}</span><span style="color:#ef4444;">${item.amount} روپے</span></div>`;
+            });
+            document.getElementById('khataList').innerHTML = listHtml;
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('savings', savings);
+            document.getElementById('totalSavings').innerText = savings + " روپے";
+            document.getElementById('mainAmount').value = "";
+        }
+    </script>
+</body>
+</html>
