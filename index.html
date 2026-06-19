@@ -3,432 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حساب کتاب ورڑن 1.1</title>
-    <!-- FontAwesome for Icons -->
+    <title>حساب کتاب ورڑن 1.2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --border-color: #cccccc;
-            --primary-color: #1e3a8a;
-            --input-bg: #ffffff;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #f5f5f5;
-            --border-color: #444444;
-            --primary-color: #3b82f6;
-            --input-bg: #2a2a2a;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: all 0.3s ease;
-            padding-bottom: 30px;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 15px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 5px 0;
-        }
-
-        .header h2 {
-            font-size: 20px;
-            color: var(--primary-color);
-        }
-
-        .theme-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border-top: 5px solid #ccc;
-        }
-
-        .card.income { border-top-color: #2e7d32; color: #2e7d32; }
-        .card.expense { border-top-color: #c62828; color: #c62828; }
-        .card.balance { border-top-color: #1565c0; color: #1565c0; }
-        .card.savings { border-top-color: #ef6c00; color: #ef6c00; }
-        .card.debt-gave { border-top-color: #6a1b9a; color: #6a1b9a; }
-        .card.debt-took { border-top-color: #303f9f; color: #303f9f; }
-
-        .card h3 { font-size: 14px; margin-bottom: 5px; opacity: 0.8; color: var(--text-color); }
-        .card .amount { font-size: 18px; font-weight: bold; }
-
-        .tabs {
-            display: flex;
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: none;
-            color: var(--text-color);
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            text-align: center;
-        }
-
-        .tab-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .section {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .section.active { display: block; }
-
-        .section-title {
-            font-size: 18px;
-            margin-bottom: 20px;
-            text-align: center;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 8px;
-            font-weight: bold;
-        }
-
-        /* بکس کو فل سائز اور خوبصورت بنانے کا اسٹائل */
-        .form-group {
-            margin-bottom: 18px;
-            width: 100%;
-            display: block;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 15px;
-            margin-bottom: 8px;
-            font-weight: 600;
-            text-align: right;
-        }
-
-        .form-control {
-            width: 100% !important;
-            display: block;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 16px;
-            outline: none;
-            transition: border 0.2s;
-            text-align: right;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-        }
-
-        /* نئے بڑے اور جاندار بٹنز کا اسٹائل */
-        .grid-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 15px;
-            width: 100%;
-        }
-
-        .btn {
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: opacity 0.2s;
-        }
-
-        .btn:active { opacity: 0.8; }
-        .btn-income { background-color: #2e7d32; }
-        .btn-expense { background-color: #c62828; }
+        :root { --bg-color: #f4f6f9; --card-bg: #ffffff; --text-color: #333; --primary-color: #1e3a8a; }
+        [data-theme="dark"] { --bg-color: #121212; --card-bg: #1e1e1e; --text-color: #f5f5f5; --primary-color: #3b82f6; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); transition: all 0.3s; padding-bottom: 30px; }
+        .container { max-width: 500px; margin: 0 auto; padding: 15px; }
         
-        .full-button-container {
-            margin-top: 12px;
-            width: 100%;
-        }
+        /* پن لاک اسکرین */
+        #lockScreen { position: fixed; top:0; left:0; width:100%; height:100%; background:var(--bg-color); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .pin-input { font-size: 24px; padding: 10px; width: 150px; text-align: center; margin-bottom: 20px; }
         
-        .btn-savings { background-color: #ef6c00; width: 100%; }
-        .btn-submit { background-color: var(--primary-color); width: 100%; }
-
-        .history-title {
-            font-size: 16px;
-            margin: 25px 0 12px 0;
-            font-weight: bold;
-            border-right: 4px solid var(--primary-color);
-            padding-right: 8px;
-        }
-
-        .list-item {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 14px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border-right: 5px solid #ccc;
-        }
-
-        .item-details div { font-size: 15px; font-weight: bold; text-align: right; }
-        .item-details small { color: #888; font-size: 12px; display: block; text-align: right; margin-top: 4px; }
-        
-        .item-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .item-amount { font-weight: bold; font-size: 16px; }
-        .delete-btn { color: #c62828; cursor: pointer; background: none; border: none; font-size: 16px; padding: 5px; }
-        .paid-btn { background-color: #2e7d32; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: bold; }
-
-        .report-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 15px;
-        }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .card { background-color: var(--card-bg); border-radius: 12px; padding: 15px; text-align: center; border-top: 5px solid #ccc; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: none; font-weight: bold; cursor: pointer; }
+        .tab-btn.active { background-color: var(--primary-color); color: white; border-radius: 8px; }
+        .form-control { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-install { background-color: #d32f2f; display: none; } /* انسٹال بٹن */
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="header">
-        <h2>حساب کتاب ورڑن 1.1</h2>
-        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
-            <i class="fas fa-moon"></i> <span>نائٹ موڈ</span>
-        </button>
+    <!-- پن لاک -->
+    <div id="lockScreen">
+        <h3>اپنی ایپ کا پاسورڈ درج کریں</h3>
+        <input type="password" id="pinCode" class="pin-input" maxlength="4" placeholder="****">
+        <button class="btn" style="background:var(--primary-color)" onclick="checkPin()">ان لاک کریں</button>
     </div>
 
-    <!-- ڈیش بورڈ گرڈ (6 الگ اور خوبصورت خانے) -->
-    <div class="dashboard-grid">
-        <div class="card income">
-            <h3>ٹوٹل آمدنی</h3>
-            <div class="amount">Rs <span id="totalIncome">0</span></div>
-        </div>
-        <div class="card expense">
-            <h3>ٹوٹل خرچہ</h3>
-            <div class="amount">Rs <span id="totalExpense">0</span></div>
-        </div>
-        <div class="card balance">
-            <h3>باقی رقم (بیلنس)</h3>
-            <div class="amount">Rs <span id="totalBalance">0</span></div>
-        </div>
-        <div class="card savings">
-            <h3>سیونگ گلاک 💰</h3>
-            <div class="amount">Rs <span id="totalSavings">0</span></div>
-        </div>
-        <div class="card debt-gave">
-            <h3>ادھار دیا (پیسے لینے ہیں)</h3>
-            <div class="amount">Rs <span id="totalDebtGave">0</span></div>
-        </div>
-        <div class="card debt-took">
-            <h3>ادھار لیا (پیسے دینے ہیں)</h3>
-            <div class="amount">Rs <span id="totalDebtTook">0</span></div>
-        </div>
-    </div>
-
-    <div class="tabs">
-        <button class="tab-btn active" id="tab-daily" onclick="switchTab('daily')">روزانہ کا حساب</button>
-        <button class="tab-btn" id="tab-udhaar" onclick="switchTab('udhaar')">ادھار لسٹ</button>
-        <button class="tab-btn" id="tab-report" onclick="switchTab('report')">ماہانہ رپورٹ</button>
-    </div>
-
-    <!-- TAB 1: Daily Section -->
-    <div id="dailySection" class="section active">
-        <div class="section-title">آمدنی، خرچہ اور سیونگ درج کریں</div>
-        
-        <div class="form-group">
-            <label>تاریخ:</label>
-            <input type="date" id="txDate" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>رقم (روپے):</label>
-            <input type="number" id="txAmount" class="form-control" placeholder="مثال: 500">
-        </div>
-        <div class="form-group" id="categoryGroup">
-            <label>کیٹیگری (صرح خرچے کے لیے):</label>
-            <select id="txCategory" class="form-control">
-                <option value="⛽ پٹرول / بائیک">⛽ پٹرول / بائیک</option>
-                <option value="🛒 گھر کا راشن">🛒 گھر کا راشن</option>
-                <option value="⚡ بجلی / گیس بل">⚡ بجلی / گیس بل</option>
-                <option value="💊 ڈاکٹر / دوائی">💊 ڈاکٹر / دوائی</option>
-                <option value="📱 موبائل پیکج">📱 موبائل پیکج</option>
-                <option value="🍔 کھانا پینا">🍔 کھانا پینا / چائے</option>
-                <option value="🛍️ شاپنگ">🛍️ شاپنگ</option>
-                <option value="💸 دیگر خرچے">💸 دیگر خرچے</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>تفصیل / کام کا نام (اختیاری):</label>
-            <input type="text" id="txDesc" class="form-control" placeholder="تفصیل لکھیں...">
+    <div class="container" id="mainApp" style="display:none;">
+        <div class="header">
+            <h2>حساب کتاب ورڑن 1.2</h2>
+            <button id="installBtn" class="btn btn-install" onclick="installPWA()">ایپ انسٹال کریں 📲</button>
         </div>
 
-        <!-- آمدنی اور خرچہ کے بڑے بٹنز -->
-        <div class="grid-buttons">
-            <button class="btn btn-income" onclick="addTransaction('income')"><i class="fas fa-plus"></i> آمدنی</button>
-            <button class="btn btn-expense" onclick="addTransaction('expense')"><i class="fas fa-minus"></i> خرچہ</button>
-        </div>
-        <!-- سیونگ گلاک کا بڑا الگ بٹن نیچے -->
-        <div class="full-button-container">
-            <button class="btn btn-savings" onclick="addTransaction('savings')"><i class="fas fa-piggy-bank"></i> سیونگ گلاک میں ڈالیں</button>
-        </div>
-
-        <div class="history-title">آج کا لین دین کا ریکارڈ</div>
-        <div id="dailyLogs"></div>
-    </div>
-
-    <!-- TAB 2: Udhaar Section -->
-    <div id="udhaarSection" class="section">
-        <div class="section-title">ادھار کھاتہ (لینا / دینا)</div>
-        
-        <div class="form-group">
-            <label>تاریخ:</label>
-            <input type="date" id="debtDate" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>بندے کا نام:</label>
-            <input type="text" id="debtName" class="form-control" placeholder="نام لکھیں...">
-        </div>
-        <div class="form-group">
-            <label>رقم (روپے):</label>
-            <input type="number" id="debtAmount" class="form-control" placeholder="مثال: 2000">
-        </div>
-        <div class="form-group">
-            <label>ادھار کی نوعیت:</label>
-            <select id="debtType" class="form-control">
-                <option value="gave">ادھار دیا (میں نے پیسے دیے - اصول کرنے ہیں)</option>
-                <option value="took">ادھار لیا (میں نے پیسے لیے - واپس کرنے ہیں)</option>
-            </select>
+        <div class="dashboard-grid">
+            <div class="card"><h3>آمدنی</h3><div class="amount">Rs <span id="totalIncome">0</span></div></div>
+            <div class="card"><h3>خرچہ</h3><div class="amount">Rs <span id="totalExpense">0</span></div></div>
         </div>
         
-        <div class="full-button-container">
+        <div class="tabs">
+            <button class="tab-btn active" id="tab-daily" onclick="switchTab('daily')">روزانہ</button>
+            <button class="tab-btn" id="tab-udhaar" onclick="switchTab('udhaar')">ادھار</button>
+            <button class="tab-btn" id="tab-report" onclick="switchTab('report')">رپورٹ</button>
+        </div>
+        <!-- یہاں سے فارم اور باقی لسٹ کا کوڈ شروع ہوگا (حصہ 3 میں) -->
+                <!-- TAB 1: Daily Section -->
+        <div id="dailySection" class="section active">
+            <div class="section-title">آمدنی، خرچہ اور سیونگ درج کریں</div>
+            
+            <!-- تاریخ کے حساب سے سرچ (Date Filter) -->
+            <div class="form-group" style="background: rgba(0,0,0,0.03); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                <label><i class="fas fa-search"></i> تاریخ کے حساب سے ریکارڈ فلٹر کریں:</label>
+                <input type="date" id="filterDate" class="form-control" onchange="filterTransactions()">
+                <button class="btn" style="background:#555; padding: 6px; font-size:13px; margin-top:5px;" onclick="clearFilter()">تمام ریکارڈ دکھائیں</button>
+            </div>
+
+            <div class="form-group">
+                <label>تاریخ:</label>
+                <input type="date" id="txDate" class="form-control">
+            </div>
+
+            <!-- وائس ان پٹ بٹن کے ساتھ رقم کا خانہ -->
+            <div class="form-group">
+                <label>رقم (روپے):</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="txAmount" class="form-control" placeholder="مثال: 500" style="flex: 1;">
+                    <button class="btn" style="width: auto; margin-top: 8px; background: #0284c7; padding: 0 15px;" onclick="startVoiceInput()" title="آواز سے رقم بولیں">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>کیٹیگری (صرف خرچے کے لیے):</label>
+                <select id="txCategory" class="form-control">
+                    <option value="⛽ پٹرول / بائیک">⛽ پٹرول / بائیک</option>
+                    <option value="🛒 گھر کا راشن">🛒 گھر کا راشن</option>
+                    <option value="⚡ بجلی / گیس بل">⚡ بجلی / گیس بل</option>
+                    <option value="💊 ڈاکٹر / دوائی">💊 ڈاکٹر / دوائی</option>
+                    <option value="📱 موبائل پیکج">📱 موبائل پیکج</option>
+                    <option value="🍔 کھانا پینا">🍔 کھانا پینا / چائے</option>
+                    <option value="🛍️ شاپنگ">🛍️ شاپنگ</option>
+                    <option value="💸 دیگر خرچے">💸 دیگر خرچے</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>تفصیل / کام کا نام (اختیاری):</label>
+                <input type="text" id="txDesc" class="form-control" placeholder="تفصیل لکھیں...">
+            </div>
+
+            <div class="grid-buttons">
+                <button class="btn btn-income" onclick="addTransaction('income')"><i class="fas fa-plus"></i> آمدنی</button>
+                <button class="btn btn-expense" onclick="addTransaction('expense')"><i class="fas fa-minus"></i> خرچہ</button>
+            </div>
+            <div class="full-button-container">
+                <button class="btn btn-savings" onclick="addTransaction('savings')"><i class="fas fa-piggy-bank"></i> سیونگ گلاک میں ڈالیں</button>
+            </div>
+
+            <!-- ایکسل فائل میں ڈاؤنلوڈ کا بٹن -->
+            <div class="full-button-container">
+                <button class="btn" style="background: #16a34a;" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> ڈیٹا ایکسل فائل میں ڈاؤنلوڈ کریں</button>
+            </div>
+
+            <div class="history-title">لین دین کا ریکارڈ</div>
+            <div id="dailyLogs"></div>
+        </div>
+
+        <!-- TAB 2: Udhaar Section -->
+        <div id="udhaarSection" class="section" style="display:none;">
+            <div class="section-title">ادھار کھاتہ (لینا / دینا)</div>
+            <div class="form-group">
+                <label>تاریخ:</label><input type="date" id="debtDate" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>بندے کا نام:</label><input type="text" id="debtName" class="form-control" placeholder="نام لکھیں...">
+            </div>
+            <div class="form-group">
+                <label>رقم (روپے):</label><input type="number" id="debtAmount" class="form-control" placeholder="مثال: 2000">
+            </div>
+            <div class="form-group">
+                <label>ادھار کی نوعیت:</label>
+                <select id="debtType" class="form-control">
+                    <option value="gave">ادھار دیا (پیسے لینے ہیں)</option>
+                    <option value="took">ادھار لیا (پیسے دینے ہیں)</option>
+                </select>
+            </div>
             <button class="btn btn-submit" onclick="addDebt()"><i class="fas fa-save"></i> ادھار ریکارڈ کریں</button>
-        </div>
 
-        <div class="history-title">باقی ادھار کی لسٹ</div>
-        <div id="debtLogs"></div>
+            <div class="history-title">باقی ادھار کی لسٹ</div>
+            <div id="debtLogs"></div>
+        </div>
+                <!-- TAB 3: Reports Section -->
+        <div id="reportSection" class="section" style="display:none;">
+            <div class="section-title">ماہانہ خرچوں کی رپورٹ</div>
+            <div id="reportLogs"></div>
+        </div>
     </div>
-        <!-- TAB 3: Reports Section -->
-    <div id="reportSection" class="section">
-        <div class="section-title">ماہانہ خرچوں کی رپورٹ</div>
-        <div id="reportLogs"></div>
-    </div>
-</div>
 
 <script>
-    // State management
+    // ایپ لاک کا پن کوڈ (آپ یہاں اپنا پسندیدہ 4 ہندسوں کا کوڈ بدل سکتے ہیں)
+    const APP_PIN = "1234"; 
+
     let transactions = JSON.parse(localStorage.getItem('khaba_tx')) || [];
     let debts = JSON.parse(localStorage.getItem('khaba_debts')) || [];
-    let currentTheme = localStorage.getItem('khaba_theme') || 'light';
+    let deferredPrompt;
 
-    // App Initialize
     document.addEventListener("DOMContentLoaded", () => {
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('txDate').value = today;
         document.getElementById('debtDate').value = today;
-        
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        updateThemeUI();
         calculateEverything();
     });
 
-    function toggleTheme() {
-        currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        localStorage.setItem('khaba_theme', currentTheme);
-        updateThemeUI();
-    }
-
-    function updateThemeUI() {
-        const btn = document.getElementById('themeToggle');
-        if(currentTheme === 'dark') {
-            btn.innerHTML = '<i class="fas fa-sun"></i> <span>لائٹ موڈ</span>';
-            btn.style.backgroundColor = '#f5f5f5';
-            btn.style.color = '#333';
+    // سیکیورٹی پن لاک چیک کرنا
+    function checkPin() {
+        const input = document.getElementById('pinCode').value;
+        if(input === APP_PIN) {
+            document.getElementById('lockScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
         } else {
-            btn.innerHTML = '<i class="fas fa-moon"></i> <span>نائٹ موڈ</span>';
-            btn.style.backgroundColor = '#1e3a8a';
-            btn.style.color = 'white';
+            alert("غلط پاسورڈ! دوبارہ کوشش کریں۔");
+            document.getElementById('pinCode').value = '';
         }
     }
 
     function switchTab(tabName) {
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById('dailySection').style.display = 'none';
+        document.getElementById('udhaarSection').style.display = 'none';
+        document.getElementById('reportSection').style.display = 'none';
         
         document.getElementById('tab-' + tabName).classList.add('active');
-        document.getElementById(tabName + 'Section').classList.add('active');
-        
-        if(tabName === 'report') {
-            generateReport();
-        }
+        document.getElementById(tabName + 'Section').style.display = 'block';
+        if(tabName === 'report') generateReport();
     }
 
     function addTransaction(type) {
@@ -437,34 +188,88 @@
         const desc = document.getElementById('txDesc').value.trim();
         let category = document.getElementById('txCategory').value;
 
-        if(!date || isNaN(amount) || amount <= 0) {
-            alert("براہ کرم درست تاریخ اور رقم درج کریں!");
-            return;
-        }
+        if(!date || isNaN(amount) || amount <= 0) { alert("درست رقم درج کریں!"); return; }
+        if(type !== 'expense') category = type === 'income' ? 'آمدنی' : 'سیونگ گلاک';
 
-        if(type !== 'expense') {
-            category = type === 'income' ? 'آمدنی' : 'سیونگ گلاک';
-        }
-
-        const tx = {
-            id: Date.now(),
-            date,
-            amount,
-            type,
-            category,
-            desc: desc || (type === 'income' ? 'آمدنی' : type === 'expense' ? 'خرچہ' : 'سیونگ')
-        };
-
-        transactions.push(tx);
-        saveAndRefresh();
-        
+        transactions.push({ id: Date.now(), date, amount, type, category, desc: desc || category });
+        localStorage.setItem('khaba_tx', JSON.stringify(transactions));
+        calculateEverything();
         document.getElementById('txAmount').value = '';
         document.getElementById('txDesc').value = '';
     }
 
-    function deleteTx(id) {
-        transactions = transactions.filter(t => t.id !== id);
-        saveAndRefresh();
+    // تاریخ فلٹر لوجک
+    function filterTransactions() {
+        const fDate = document.getElementById('filterDate').value;
+        if(!fDate) return;
+        renderDailyLogs(fDate);
+    }
+
+    function clearFilter() {
+        document.getElementById('filterDate').value = '';
+        renderDailyLogs();
+    }
+
+    // آواز سے رقم بولنے کا جدید فیچر (Voice Input)
+    function startVoiceInput() {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert("معذرت، آپ کا براؤزر آواز کی شناخت کو سپورٹ نہیں کرتا۔ کروم استعمال کریں۔");
+            return;
+        }
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US'; // گنتی کے لیے انگریزی بہترین کام کرتی ہے
+
+        recognition.onstart = () => { alert("بولیں! میں سن رہا ہوں... (صرف رقم بولیں جیسے 500)"); };
+        recognition.onerror = () => { alert("آواز صاف نہیں آئی، دوبارہ کوشش کریں۔"); };
+        
+        recognition.onresult = (event) => {
+            const voiceText = event.results[0][0].transcript;
+            const number = voiceText.replace(/[^0-9]/g, ''); // صرف نمبر الگ کرنا
+            if(number) {
+                document.getElementById('txAmount').value = number;
+            } else {
+                alert("میں رقم نہیں سمجھ سکا: " + voiceText);
+            }
+        };
+        recognition.start();
+    }
+
+    // ایکسل فائل ایکسپورٹ فیچر (CSV Format)
+    function exportToExcel() {
+        if(transactions.length === 0) { alert("ایکسپورٹ کرنے کے لیے کوئی ڈیٹا نہیں ہے!"); return; }
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // اردو سپورٹ کے لیے UTF-8 BOM
+        csvContent += "تاریخ,نوعیت,کیٹیگری,تفصیل,رقم\n";
+        
+        transactions.forEach(t => {
+            csvContent += `${t.date},${t.type === 'income' ? 'آمدنی' : t.type === 'expense' ? 'خرچہ' : 'سیونگ'},${t.category},${t.desc},${t.amount}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Hisab_Kitab_Backup.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // PWA انسٹال بٹن کا لوجک
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('installBtn').style.display = 'block';
+    });
+
+    function installPWA() {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                document.getElementById('installBtn').style.display = 'none';
+            }
+            deferredPrompt = null;
+        });
     }
 
     function addDebt() {
@@ -473,196 +278,80 @@
         const amount = parseFloat(document.getElementById('debtAmount').value);
         const type = document.getElementById('debtType').value;
 
-        if(!date || !name || isNaN(amount) || amount <= 0) {
-            alert("براہ کرم تمام فیلڈز درست طریقے سے پُر کریں!");
-            return;
-        }
-
-        const debt = {
-            id: Date.now(),
-            date,
-            name,
-            amount,
-            type,
-            status: 'pending'
-        };
-
-        debts.push(debt);
+        if(!date || !name || isNaN(amount) || amount <= 0) { alert("تمام معلومات پُر کریں!"); return; }
+        debts.push({ id: Date.now(), date, name, amount, type });
         localStorage.setItem('khaba_debts', JSON.stringify(debts));
         calculateEverything();
-        
         document.getElementById('debtName').value = '';
         document.getElementById('debtAmount').value = '';
     }
 
     function settleDebt(id) {
-        const debtIndex = debts.findIndex(d => d.id === id);
-        if(debtIndex > -1) {
-            const debt = debts[debtIndex];
-            
-            if(debt.type === 'gave') {
-                transactions.push({
-                    id: Date.now(),
-                    date: new Date().toISOString().split('T')[0],
-                    amount: debt.amount,
-                    type: 'income',
-                    category: 'ادھار واپسی وصولی',
-                    desc: `${debt.name} سے ادھار واپس ملا`
-                });
-            } else if(debt.type === 'took') {
-                transactions.push({
-                    id: Date.now(),
-                    date: new Date().toISOString().split('T')[0],
-                    amount: debt.amount,
-                    type: 'expense',
-                    category: 'ادھار ادائیگی',
-                    desc: `${debt.name} کا ادھار واپس کیا`
-                });
-            }
-
-            debts.splice(debtIndex, 1);
-            
+        const idx = debts.findIndex(d => d.id === id);
+        if(idx > -1) {
+            const d = debts[idx];
+            transactions.push({
+                id: Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                amount: d.amount,
+                type: d.type === 'gave' ? 'income' : 'expense',
+                category: d.type === 'gave' ? 'ادھار واپسی' : 'ادھار ادائیگی',
+                desc: `${d.name} کا کھاتہ صاف ہوا`
+            });
+            debts.splice(idx, 1);
             localStorage.setItem('khaba_tx', JSON.stringify(transactions));
             localStorage.setItem('khaba_debts', JSON.stringify(debts));
             calculateEverything();
         }
     }
 
-    function deleteDebtDirect(id) {
-        debts = debts.filter(d => d.id !== id);
-        localStorage.setItem('khaba_debts', JSON.stringify(debts));
-        calculateEverything();
-    }
-
-    function saveAndRefresh() {
-        localStorage.setItem('khaba_tx', JSON.stringify(transactions));
-        calculateEverything();
-    }
+    function deleteTx(id) { transactions = transactions.filter(t => t.id !== id); localStorage.setItem('khaba_tx', JSON.stringify(transactions)); calculateEverything(); }
+    function deleteDebtDirect(id) { debts = debts.filter(d => d.id !== id); localStorage.setItem('khaba_debts', JSON.stringify(debts)); calculateEverything(); }
 
     function calculateEverything() {
-        let inc = 0, exp = 0, sav = 0;
-        
-        transactions.forEach(t => {
-            if(t.type === 'income') inc += t.amount;
-            if(t.type === 'expense') exp += t.amount;
-            if(t.type === 'savings') sav += t.amount;
-        });
-
-        let debtGave = 0;
-        let debtTook = 0;
-        
-        debts.forEach(d => {
-            if(d.type === 'gave') debtGave += d.amount;
-            if(d.type === 'took') debtTook += d.amount;
-        });
-
-        let bal = inc - exp - sav;
+        let inc = 0, exp = 0, sav = 0, dGave = 0, dTook = 0;
+        transactions.forEach(t => { if(t.type === 'income') inc += t.amount; if(t.type === 'expense') exp += t.amount; if(t.type === 'savings') sav += t.amount; });
+        debts.forEach(d => { if(d.type === 'gave') dGave += d.amount; if(d.type === 'took') dTook += d.amount; });
 
         document.getElementById('totalIncome').innerText = inc.toLocaleString();
         document.getElementById('totalExpense').innerText = exp.toLocaleString();
         document.getElementById('totalSavings').innerText = sav.toLocaleString();
-        document.getElementById('totalBalance').innerText = bal.toLocaleString();
-        
-        // الگ الگ ادھار کے خانوں کا حساب شو کرنا
-        document.getElementById('totalDebtGave').innerText = debtGave.toLocaleString();
-        document.getElementById('totalDebtTook').innerText = debtTook.toLocaleString();
-
+        document.getElementById('totalBalance').innerText = (inc - exp - sav).toLocaleString();
+        document.getElementById('totalDebtGave').innerText = dGave.toLocaleString();
+        document.getElementById('totalDebtTook').innerText = dTook.toLocaleString();
         renderDailyLogs();
         renderDebtLogs();
     }
 
-    function renderDailyLogs() {
-        const logsDiv = document.getElementById('dailyLogs');
-        logsDiv.innerHTML = '';
-
-        if(transactions.length === 0) {
-            logsDiv.innerHTML = '<p style="text-align:center; padding:15px; opacity:0.6;">آج کوئی ریکارڈ موجود نہیں ہے۔</p>';
-            return;
-        }
-
-        [...transactions].reverse().forEach(t => {
-            let color = '#2e7d32';
-            if(t.type === 'expense') color = '#c62828';
-            if(t.type === 'savings') color = '#ef6c00';
-
-            logsDiv.innerHTML += `
-                <div class="list-item" style="border-right-color: ${color}">
-                    <div class="item-details">
-                        <div>${t.desc}</div>
-                        <small>${t.date} | ${t.category}</small>
-                    </div>
-                    <div class="item-actions">
-                        <span class="item-amount" style="color: ${color}">${t.type === 'expense' ? '-' : '+'}${t.amount}</span>
-                        <button class="delete-btn" onclick="deleteTx(${t.id})"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            `;
+    function renderDailyLogs(filterDate = null) {
+        const logs = document.getElementById('dailyLogs'); logs.innerHTML = '';
+        let list = filterDate ? transactions.filter(t => t.date === filterDate) : transactions;
+        if(list.length === 0) { logs.innerHTML = '<p style="text-align:center;padding:10px;opacity:0.5;">کوئی ریکارڈ نہیں ہے۔</p>'; return; }
+        [...list].reverse().forEach(t => {
+            let c = t.type === 'expense' ? '#c62828' : t.type === 'savings' ? '#ef6c00' : '#2e7d32';
+            logs.innerHTML += `<div class="list-item" style="border-right-color:${c}"><div class="item-details"><div>${t.desc}</div><small>${t.date} | ${t.category}</small></div><div class="item-actions"><span class="item-amount" style="color:${c}">${t.type==='expense'?'-':'+'}${t.amount}</span><button class="delete-btn" onclick="deleteTx(${t.id})"><i class="fas fa-trash"></i></button></div></div>`;
         });
     }
 
     function renderDebtLogs() {
-        const debtDiv = document.getElementById('debtLogs');
-        debtDiv.innerHTML = '';
-
-        if(debts.length === 0) {
-            debtDiv.innerHTML = '<p style="text-align:center; padding:15px; opacity:0.6;">کوئی ادھار باقی نہیں ہے!</p>';
-            return;
-        }
-
+        const logs = document.getElementById('debtLogs'); logs.innerHTML = '';
+        if(debts.length === 0) { logs.innerHTML = '<p style="text-align:center;padding:10px;opacity:0.5;">کوئی ادھار باقی نہیں ہے۔</p>'; return; }
         [...debts].reverse().forEach(d => {
-            const isGave = d.type === 'gave';
-            const color = isGave ? '#6a1b9a' : '#303f9f';
-            const typeText = isGave ? 'ادھار دیا (لینے ہیں)' : 'ادھار لیا (دینے ہیں)';
-
-            debtDiv.innerHTML += `
-                <div class="list-item" style="border-right-color: ${color}">
-                    <div class="item-details">
-                        <div>${d.name} <span style="font-size:12px; color:${color}; font-weight:normal;">(${typeText})</span></div>
-                        <small>${d.date}</small>
-                    </div>
-                    <div class="item-actions">
-                        <span class="item-amount" style="color: ${color}">Rs ${d.amount}</span>
-                        <button class="paid-btn" onclick="settleDebt(${d.id})">کھاتہ صاف کریں</button>
-                        <button class="delete-btn" onclick="deleteDebtDirect(${d.id})"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            `;
+            let c = d.type === 'gave' ? '#6a1b9a' : '#303f9f';
+            logs.innerHTML += `<div class="list-item" style="border-right-color:${c}"><div class="item-details"><div>${d.name} <small>(${d.type==='gave'?'لینے ہیں':'دینے ہیں'})</small></div><small>${d.date}</small></div><div class="item-actions"><span class="item-amount" style="color:${c}">Rs ${d.amount}</span><button class="paid-btn" onclick="settleDebt(${d.id})">صاف</button><button class="delete-btn" onclick="deleteDebtDirect(${d.id})"><i class="fas fa-trash"></i></button></div></div>`;
         });
     }
 
     function generateReport() {
-        const reportDiv = document.getElementById('reportLogs');
-        reportDiv.innerHTML = '';
-
-        let categoryTotals = {};
-        let totalExp = 0;
-
-        transactions.forEach(t => {
-            if(t.type === 'expense') {
-                categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
-                totalExp += t.amount;
-            }
-        });
-
-        if(totalExp === 0) {
-            reportDiv.innerHTML = '<p style="text-align:center; padding:15px; opacity:0.6;">رپورٹ کے لیے کوئی خرچے کا ریکارڈ نہیں ملا۔</p>';
-            return;
-        }
-
-        reportDiv.innerHTML += `<p style="margin-bottom:15px; font-weight:bold;">کل خرچہ باقاعدہ کیٹیگری وائز:</p>`;
-
-        for(let cat in categoryTotals) {
-            let amt = categoryTotals[cat];
-            let percentage = ((amt / totalExp) * 100).toFixed(1);
-            reportDiv.innerHTML += `
-                <div class="report-item">
-                    <span>${cat}</span>
-                    <span><b>Rs ${amt}</b> (${percentage}%)</span>
-                </div>
-            `;
+        const div = document.getElementById('reportLogs'); div.innerHTML = '';
+        let cats = {}, total = 0;
+        transactions.forEach(t => { if(t.type === 'expense') { cats[t.category] = (cats[t.category] || 0) + t.amount; total += t.amount; } });
+        if(total === 0) { div.innerHTML = '<p style="text-align:center;padding:10px;">کوئی خرچہ نہیں ملا۔</p>'; return; }
+        for(let cat in cats) {
+            let pct = ((cats[cat]/total)*100).toFixed(1);
+            div.innerHTML += `<div class="report-item"><span>${cat}</span><span><b>Rs ${cats[cat]}</b> (${pct}%)</span></div>`;
         }
     }
 </script>
-
 </body>
 </html>
