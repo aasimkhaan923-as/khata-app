@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حساب کتاب - ورژن 2.0 پرو</title>
+    <title>حساب کتاب - ورژن 3.0 پرو</title>
     
     <!-- پریمیم آئیکنز اور خوبصورت اردو فونٹس کی لائبریریز -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- گراف (Pie Chart) چلانے کے لیے دنیا کی سب سے تیز رفتار لائبریری -->
+    <!-- گراف (Pie Chart) چلانے کے لیے تیز رفتار لائبریری -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -25,7 +25,7 @@
             --badge-bg: #f1f5f9;
         }
 
-        /* وی آئی پی ڈارک موڈ کے شاہکار کلرز (VIP Dark Theme) */
+        /* ڈارک موڈ کے شاہکار کلرز (VIP Dark Theme) */
         [data-theme="dark"] {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
@@ -37,7 +37,7 @@
             --badge-bg: #334155;
         }
 
-        /* بنیادی سیٹنگز جو ایپ کو مکھن بناتی ہیں */
+        /* بنیادی مکھن سیٹنگز */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -52,7 +52,6 @@
             padding: 15px;
             display: flex;
             justify-content: center;
-            align-index: 1;
         }
 
         .container {
@@ -63,7 +62,7 @@
             gap: 15px;
         }
 
-        /* ہیڈر کا خوبصورت ڈیزائن جہاں ڈارک موڈ بٹن ہے */
+        /* ہیڈر ورژن 3.0 پرو (جنرل - بغیر نام کے) */
         .header {
             display: flex;
             justify-content: space-between;
@@ -96,10 +95,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: var(--shadow);
         }
 
-        /* مین ڈیش بورڈ گرڈ اور کارڈز کا پریمیم لک */
+        /* مین ڈیش بورڈ گرڈ اور نئے والیٹ کارڈز کا سٹائل */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -108,7 +106,7 @@
 
         .card {
             background: var(--card-bg);
-            padding: 16px;
+            padding: 14px;
             border-radius: 16px;
             text-align: center;
             box-shadow: var(--shadow);
@@ -117,7 +115,6 @@
             overflow: hidden;
         }
 
-        /* کارڈز کی خوبصورت رنگ برنگی پٹیوں کا سٹائل */
         .card::before {
             content: '';
             position: absolute;
@@ -127,15 +124,16 @@
             height: 5px;
         }
 
+        /* کیش اور بینک کارڈز کی رنگ برنگی پٹیاں */
         .card.income::before { background: #10b981; }
         .card.expense::before { background: #ef4444; }
-        .card.balance::before { background: #3b82f6; }
-        .card.savings::before { background: #f59e0b; }
+        .card.cash::before { background: #0ea5e9; }
+        .card.bank::before { background: #6366f1; }
         .card.borrowed::before { background: #8b5cf6; }
         .card.lent::before { background: #ec4899; }
 
         .card h3 {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             margin-bottom: 6px;
             opacity: 0.8;
@@ -146,17 +144,86 @@
         }
 
         .card .amount {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
         }
 
         .card.income .amount { color: #10b981; }
         .card.expense .amount { color: #ef4444; }
-        .card.balance .amount { color: #3b82f6; }
-        .card.savings .amount { color: #f59e0b; }
+        .card.cash .amount { color: #0ea5e9; }
+        .card.bank .amount { color: #6366f1; }
         .card.borrowed .amount { color: #8b5cf6; }
         .card.lent .amount { color: #ec4899; }
-                /* مین فارمز اور ان پٹ کا زبردست پریمیم ڈیزائن */
+                /* ان بلٹ اسمارٹ کیلکولیٹر کا وی آئی پی ڈیزائن */
+        .calc-container {
+            display: none;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 10px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .calc-screen {
+            width: 100%;
+            padding: 10px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            text-align: left;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            outline: none;
+        }
+        .calc-btn-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        .calc-btn {
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .calc-btn.op { background: var(--primary-color); color: #ffffff; }
+        .calc-btn.clear { background: #ef4444; color: #ffffff; }
+        .calc-btn.equal { background: #10b981; color: #ffffff; }
+
+        /* لائیو کیٹیگری فلٹر ٹیگز (Category Tags) کا ماڈرن لک */
+        .category-tags-container {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 5px 0;
+            margin-top: 8px;
+            scrollbar-width: none; /* ہائیڈ اسکرول بار */
+        }
+        .category-tags-container::-webkit-scrollbar { display: none; }
+        .tag-btn {
+            white-space: nowrap;
+            padding: 6px 12px;
+            background: var(--badge-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .tag-btn.active {
+            background: var(--primary-color);
+            color: #ffffff;
+            border-color: var(--primary-color);
+        }
+
+        /* مین یو آئی اور فارمز سیٹنگز */
         .main-box {
             background: var(--card-bg);
             padding: 20px;
@@ -164,9 +231,8 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
         }
-
         .box-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             margin-bottom: 15px;
             color: var(--primary-color);
@@ -176,11 +242,7 @@
             align-items: center;
             gap: 8px;
         }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
+        .form-group { margin-bottom: 15px; }
         .form-group label {
             display: block;
             font-size: 13px;
@@ -188,7 +250,6 @@
             margin-bottom: 6px;
             opacity: 0.9;
         }
-
         .form-control {
             width: 100%;
             padding: 12px;
@@ -199,132 +260,91 @@
             font-size: 14px;
             outline: none;
         }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-        }
-
-        /* فوری اینٹری بٹنز (Quick Shortcut Buttons) کا اسٹائل */
-        .quick-btn-container {
+        .input-with-icon {
+            position: relative;
             display: flex;
-            gap: 8px;
-            margin-top: 8px;
+            align-items: center;
         }
-
-        .quick-amount-btn {
-            flex: 1;
-            padding: 8px;
+        .inner-calc-trigger {
+            position: absolute;
+            left: 10px;
             background: var(--badge-bg);
             border: 1px solid var(--border-color);
-            color: var(--text-color);
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* ریڈیو بٹنز (کیش / بینک) کا پریمیم اسٹائل */
+        .wallet-selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .wallet-option {
+            flex: 1;
+            position: relative;
+        }
+        .wallet-option input[type="radio"] {
+            display: none;
+        }
+        .wallet-label {
+            display: block;
+            padding: 10px;
+            text-align: center;
+            background: var(--badge-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            text-align: center;
         }
-
-        .quick-amount-btn:active {
+        .wallet-option input[type="radio"]:checked + .wallet-label {
             background: var(--primary-color);
             color: #ffffff;
+            border-color: var(--primary-color);
         }
 
-        /* ایکشن بٹنز (جمع/خرچہ/سیونگ) کا فل پروفیشنل ڈیزائن */
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
+        .quick-btn-container { display: flex; gap: 6px; margin-top: 8px; }
+        .quick-amount-btn {
+            flex: 1; padding: 8px; background: var(--badge-bg);
+            border: 1px solid var(--border-color); color: var(--text-color);
+            border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
         }
-
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
         .action-btn {
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            color: #ffffff;
+            padding: 12px; border: none; border-radius: 10px;
+            font-weight: 700; font-size: 13px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 6px; color: #ffffff;
         }
-
         .btn-income { background-color: #10b981; }
         .btn-expense { background-color: #ef4444; }
         .btn-savings { background-color: #f59e0b; }
 
-        /* ٹیب بٹنز کا ماڈرن لک (روزانہ کھاتہ، ادھار لسٹ، ماہانہ رپورٹ) */
-        .tabs-container {
-            display: flex;
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 6px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-        }
+        .tabs-container { display: flex; background: var(--card-bg); border-radius: 12px; padding: 6px; box-shadow: var(--shadow); border: 1px solid var(--border-color); }
+        .tab-link { flex: 1; padding: 10px; text-align: center; background: none; border: none; color: var(--text-color); font-weight: 600; font-size: 13px; cursor: pointer; border-radius: 8px; }
+        .tab-link.active { background: var(--primary-color); color: #ffffff; }
 
-        .tab-link {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-
-        .tab-link.active {
-            background: var(--primary-color);
-            color: #ffffff;
-        }
-
-        /* لسٹ اور ہسٹری کارڈز کا وی آئی پی ڈیزائن */
-        .record-item {
-            background: var(--card-bg);
-            padding: 12px 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-        }
-
-        .record-details {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
+        .record-item { background: var(--card-bg); padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
+        .record-details { display: flex; flex-direction: column; gap: 4px; }
         .record-title { font-weight: 600; font-size: 14px; }
         .record-meta { font-size: 11px; opacity: 0.6; }
-        .record-badge {
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 600;
-            background: var(--badge-bg);
-        }
+        .record-badge { padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; background: var(--badge-bg); }
     </style>
 </head>
 <body>
 
 <div class="container" id="mainApp">
     
-    <!-- ہیڈر ورژن 2.0 پرو اور ڈارک موڈ بٹن -->
+    <!-- ہیڈر ورژن 3.0 پرو -->
     <div class="header">
-        <h2><i class="fas fa-wallet"></i> حساب کتاب ورژن 2.0 پرو 🚀</h2>
-        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" title="تیم تبدیل کریں">🌙</button>
+        <h2><i class="fas fa-wallet"></i> حساب کتاب ورژن 3.0 پرو 🚀</h2>
+        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">🌙</button>
     </div>
 
-    <!-- مین ڈیش بورڈ کارڈز -->
+    <!-- مین ڈیش بورڈ کارڈز (آمدنی، خرچہ، کیش، بینک، ادھار) -->
     <div class="dashboard-grid">
         <div class="card income">
             <h3><i class="fas fa-arrow-down"></i> ٹوٹل آمدنی</h3>
@@ -334,25 +354,25 @@
             <h3><i class="fas fa-arrow-up"></i> ٹوٹل خرچہ</h3>
             <div class="amount">Rs <span id="totalExpense">0</span></div>
         </div>
-        <div class="card balance">
-            <h3><i class="fas fa-scale-balanced"></i> باقی رقم (بیلنس)</h3>
-            <div class="amount">Rs <span id="totalBalance">0</span></div>
+        <div class="card cash">
+            <h3><i class="fas fa-money-bill-wave"></i> کیش ان ہینڈ (جیب)</h3>
+            <div class="amount">Rs <span id="totalCash">0</span></div>
         </div>
-        <div class="card savings">
-            <h3><i class="fas fa-piggy-bank"></i> سیونگ گلاک</h3>
-            <div class="amount">Rs <span id="totalSavings">0</span></div>
+        <div class="card bank">
+            <h3><i class="fas fa-credit-card"></i> بینک / ایزی پیسہ</h3>
+            <div class="amount">Rs <span id="totalBank">0</span></div>
         </div>
         <div class="card borrowed">
-            <h3><i class="fas fa-hand-holding-hand"></i> ادھار لیا (دینے ہیں)</h3>
+            <h3><i class="fas fa-hand-holding-hand"></i> ادھار (دینے ہیں)</h3>
             <div class="amount">Rs <span id="totalBorrowed">0</span></div>
         </div>
         <div class="card lent">
-            <h3><i class="fas fa-hand-holding-dollar"></i> ادھار دیا (لینے ہیں)</h3>
+            <h3><i class="fas fa-hand-holding-dollar"></i> ادھار (لینے ہیں)</h3>
             <div class="amount">Rs <span id="totalLent">0</span></div>
         </div>
     </div>
 
-    <!-- مین مینو نیویگیشن ٹیبز -->
+    <!-- مینو نیویگیشن ٹیبز -->
     <div class="tabs-container">
         <button class="tab-link active" onclick="switchTab('daily')">روزانہ کا حساب</button>
         <button class="tab-link" onclick="switchTab('udhar')">ادھار لسٹ</button>
@@ -369,11 +389,53 @@
             </div>
 
             <div class="form-group">
+                <label>کھاتہ منتخب کریں (پیسے کہاں سے آئے/گئے؟):</label>
+                <div class="wallet-selector">
+                    <div class="wallet-option">
+                        <input type="radio" id="walletCash" name="txWallet" value="cash" checked>
+                        <label for="walletCash" class="wallet-label"><i class="fas fa-money-bill-wave"></i> کیش (جیب)</label>
+                    </div>
+                    <div class="wallet-option">
+                        <input type="radio" id="walletBank" name="txWallet" value="bank">
+                        <label for="walletBank" class="wallet-label"><i class="fas fa-credit-card"></i> بینک / ایزی پیسہ</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>رقم درج کریں (روپے):</label>
-                <!-- مائیک والا بٹن ختم اور ان پٹ اب فل چوڑا اور خوبصورت ہے -->
-                <input type="number" id="txAmount" class="form-control" placeholder="مثال: 500">
+                <div class="input-with-icon">
+                    <input type="number" id="txAmount" class="form-control" placeholder="مثال: 500">
+                    <button type="button" class="inner-calc-trigger" onclick="toggleCalculator()"><i class="fas fa-calculator"></i> حساب لگائیں</button>
+                </div>
                 
-                <!-- فوری ان پٹ کے اسمارٹ بٹنز کا پینل -->
+                <!-- 🧮 ان بلٹ اسمارٹ کیلکولیٹر پینل -->
+                <div class="calc-container" id="calculatorPanel">
+                    <input type="text" id="calcScreen" class="calc-screen" readonly placeholder="0">
+                    <div class="calc-btn-grid">
+                        <button type="button" class="calc-btn clear" onclick="clearCalc()">C</button>
+                        <button type="button" class="calc-btn op" onclick="pressCalc('/')">÷</button>
+                        <button type="button" class="calc-btn op" onclick="pressCalc('*')">×</button>
+                        <button type="button" class="calc-btn op" onclick="pressCalc('-')">-</button>
+                        
+                        <button type="button" class="calc-btn" onclick="pressCalc('7')">7</button>
+                        <button type="button" class="calc-btn" onclick="pressCalc('8')">8</button>
+                        <button type="button" class="calc-btn" onclick="pressCalc('9')">9</button>
+                        <button type="button" class="calc-btn op" onclick="pressCalc('+')">+</button>
+                        
+                        <button type="button" class="calc-btn" onclick="pressCalc('4')">4</button>
+                        <button type="button" class="calc-btn" onclick="pressCalc('5')">5</button>
+                        <button type="button" class="calc-btn" onclick="pressCalc('6')">6</button>
+                        <button type="button" class="calc-btn equal" onclick="solveCalc()">=</button>
+                        
+                        <button type="button" class="calc-btn" onclick="pressCalc('1')">1</button>
+                        <button type="button" class="calc-btn" onclick="pressCalc('2')">2</button>
+                        <button type="button" class="calc-btn" onclick="pressCalc('3')">3</button>
+                        <button type="button" class="calc-btn" onclick="pressCalc('0')">0</button>
+                    </div>
+                </div>
+
+                <!-- فوری اینٹری کے شارٹ کٹ بٹنز -->
                 <div class="quick-btn-container">
                     <button type="button" class="quick-amount-btn" onclick="quickInput(50)">+50</button>
                     <button type="button" class="quick-amount-btn" onclick="quickInput(100)">+100</button>
@@ -402,7 +464,7 @@
 
             <div class="form-group">
                 <label>کوئی خاص تفصیل (آپشنل):</label>
-                <input type="text" id="txDetails" class="form-control" placeholder="تفصیل لکھیں (جیسے: مہران بائیک پٹرول)">
+                <input type="text" id="txDetails" class="form-control" placeholder="تفصیل لکھیں...">
             </div>
 
             <div class="btn-grid">
@@ -412,27 +474,40 @@
             </div>
         </div>
 
-        <!-- ایڈوانس سرچ اور فلٹر بار -->
+        <!-- 🏷️ ایڈوانس سرچ اور لائیو کیٹیگری فلٹر بٹنز کا پینل -->
         <div class="main-box" style="margin-top: 15px;">
             <div class="box-title"><i class="fas fa-search"></i> حساب کتاب فلٹر اور تلاش کریں</div>
             <div class="form-group">
-                <input type="text" id="searchBar" class="form-control" placeholder="کچھ بھی تلاش کریں (جیسے: پٹرول، راشن، تاریخ)..." onkeyup="filterRecords()">
+                <input type="text" id="searchBar" class="form-control" placeholder="تلاش کریں (جیسے: پٹرول، راشن)..." onkeyup="filterRecords()">
             </div>
             
-            <div style="margin-bottom: 10px; font-weight: 600; font-size: 13px;"><i class="fas fa-list"></i> آج کا لین دین کا ریکارڈ:</div>
+            <div style="font-size: 12px; font-weight: 700; opacity: 0.8;"><i class="fas fa-tags"></i> کیٹیگری کے حساب سے لائیو فلٹر کریں:</div>
+            <!-- جادوئی آل کیٹیگری بٹنز کا ہوریزونٹل پینل -->
+            <div class="category-tags-container" id="categoryTagsPanel">
+                <button class="tag-btn active" onclick="filterByCategory('all')">👁️ سب دکھائیں</button>
+                <button class="tag-btn" onclick="filterByCategory('پٹرول / بائیک')">⛽ پٹرول</button>
+                <button class="tag-btn" onclick="filterByCategory('گھر کا راشن')">🛒 راشن</button>
+                <button class="tag-btn" onclick="filterByCategory('بجلی / گیس بل')">⚡ بلز</button>
+                <button class="tag-btn" onclick="filterByCategory('موبائل پیکیج')">📱 پیکیج</button>
+                <button class="tag-btn" onclick="filterByCategory('کھانا پینا / چائے')">🍔 چائے/کھانا</button>
+                <button class="tag-btn" onclick="filterByCategory('کمیٹی کی قسط')">🤝 کمیٹی</button>
+                <button class="tag-btn" onclick="filterByCategory('دیگر خرچے')">💸 دیگر</button>
+            </div>
+            
+            <div style="margin: 15px 0 10px 0; font-weight: 600; font-size: 13px;"><i class="fas fa-list"></i> لین دین کا ریکارڈ:</div>
             <div id="dailyRecordsList">
-                <!-- یہاں جاوا اسکرپٹ کے ذریعے ریکارڈز آئیں گے -->
+                <!-- یہاں جاوا اسکرپٹ سے لسٹ لوڈ ہوگی -->
             </div>
         </div>
     </div>
 
-    <!-- سیکشن 2: ادھار لسٹ اور کسٹمر کارڈز کی ڈائریکٹری -->
+    <!-- سیکشن 2: ادھار لسٹ کھاتہ -->
     <div id="udharSection" class="tab-content" style="display: none;">
         <div class="main-box">
             <div class="box-title"><i class="fas fa-user-plus"></i> نیا ادھار کھاتہ کھولیں</div>
             <div class="form-group">
-                <label>بندے یا کسٹمر کا نام:</label>
-                <input type="text" id="udharName" class="form-control" placeholder="نام لکھیں (جیسے: عمران بھائی)">
+                <label>کسٹمر یا دوست کا نام:</label>
+                <input type="text" id="udharName" class="form-control" placeholder="نام لکھیں...">
             </div>
             <div class="form-group">
                 <label>رقم درج کریں:</label>
@@ -446,265 +521,301 @@
 
         <div class="main-box" style="margin-top: 15px;">
             <div class="box-title"><i class="fas fa-users"></i> تمام کسٹمرز / دوستوں کی پروفائل ہسٹری</div>
-            <div id="udharRecordsList">
-                <!-- ادھار کی لسٹ کا پینل -->
-            </div>
+            <div id="udharRecordsList"></div>
         </div>
     </div>
 
-    <!-- سیکشن 3: ماہانہ رپورٹ اور جادوئی گول گراف (Pie Chart) -->
+    <!-- سیکشن 3: ماہانہ رپورٹ اور گراف چارٹ -->
     <div id="reportSection" class="tab-content" style="display: none;">
         <div class="main-box">
             <div class="box-title"><i class="fas fa-chart-pie"></i> خرچوں کا ماہانہ گراف چارٹ</div>
             
-            <!-- گراف لوڈ کرنے کا پریمیم کینوس فریم -->
-            <div style="max-width: 280px; margin: 0 auto 20px auto;">
+            <div style="max-width: 260px; margin: 0 auto 20px auto;">
                 <canvas id="monthlyPieChart"></canvas>
             </div>
 
             <div class="box-title"><i class="fas fa-file-invoice"></i> مکمل ماہانہ سمری رپورٹ</div>
-            <div id="monthlySummaryList">
-                <!-- یہاں پر پوری رپورٹ لوڈ ہوگی -->
-            </div>
+            <div id="monthlySummaryList"></div>
 
-            <!-- لائف ٹائم گوگل شیٹ کلاؤڈ بیک اپ کا بٹن -->
+            <!-- بیک اپ بٹن بغیر کسی سر درد پاپ اپ کے مینوئل ڈاؤن لوڈ کے لیے -->
             <button class="action-btn" style="background-color: #1e3a8a; width: 100%; margin-top: 15px;" onclick="exportToExcel()">
-                <i class="fas fa-cloud-arrow-up"></i> گوگل شیٹ پر لائف ٹائم بیک اپ لیں 💾
+                <i class="fas fa-cloud-arrow-up"></i> کلاؤڈ ایکسل شیٹ ڈاؤن لوڈ کریں 💾
             </button>
         </div>
     </div>
 
 </div> <!-- کنٹینر کا اختتام -->
-    <!-- جاوا اسکرپٹ لاجک جو ایپ میں جان ڈالے گی -->
+    <!-- جاوا اسکرپٹ لاجک - ورژن 3.0 پرو -->
 <script>
-    // ڈیٹا کو موبائل کی میموری (LocalStorage) میں محفوظ کرنے کی سیٹنگز
-    let records = JSON.parse(localStorage.getItem('budget_records')) || [];
-    let udharRecords = JSON.parse(localStorage.getItem('udhar_records')) || [];
-    let currentTab = 'daily';
-    let myChart = null; // گراف کا ویریبل
+    let records = JSON.parse(localStorage.getItem('hisaab_records_v3')) || [];
+    let udharRecords = JSON.parse(localStorage.getItem('hisaab_udhar_v3')) || [];
+    let myChart = null;
+    let selectedCategoryFilter = 'all';
 
-    // ایپ لوڈ ہوتے ہی سب سے پہلے چلنے والے کام
+    // ایپ لوڈ ہوتے ہی تاریخ اور ڈیٹا سیٹ کرنا
     window.onload = function() {
-        // آج کی تاریخ خود بخود سیٹ کرنا
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('txDate').value = today;
-        
-        // پہلے سے محفوظ شدہ تھیم (ڈارک/لائٹ) چیک کرنا
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.setAttribute('data-theme', 'dark');
-            document.getElementById('themeToggle').innerHTML = '☀️';
-        }
-        
-        // فکسڈ ماہانہ خرچوں کو آٹو چیک کرنا (مثال: ہر مہینے کی پہلی تاریخ)
-        checkAutoMonthlyExpenses();
-        
-        // پورا ڈیش بورڈ اور لسٹیں اپڈیٹ کرنا
+        document.getElementById('txDate').value = new Date().toISOString().split('T')[0];
         updateDashboard();
-        renderDailyRecords();
-        renderUdharRecords();
-        renderMonthlyReport();
+        switchTab('daily');
     };
 
-    // ۱۔ ڈارک اور لائٹ موڈ تبدیل کرنے کا پروفیشنل فنکشن
+    // تھیم تبدیل کرنے کا پریمیم نظام
     function toggleTheme() {
-        const body = document.body;
-        const themeBtn = document.getElementById('themeToggle');
+        const body = document.documentElement;
+        const currentTheme = body.getAttribute('data-theme');
+        const btn = document.getElementById('themeToggle');
         
-        if (body.getAttribute('data-theme') === 'dark') {
+        if (currentTheme === 'dark') {
             body.removeAttribute('data-theme');
-            themeBtn.innerHTML = '🌙';
-            localStorage.setItem('theme', 'light');
+            btn.innerHTML = '🌙';
         } else {
             body.setAttribute('data-theme', 'dark');
-            themeBtn.innerHTML = '☀️';
-            localStorage.setItem('theme', 'dark');
+            btn.innerHTML = '☀️';
         }
     }
 
-    // ۲۔ فوری رقم داخل کرنے والے بٹنز (Quick Input) کا کام
-    function quickInput(amount) {
-        const amtInput = document.getElementById('txAmount');
-        let currentVal = parseFloat(amtInput.value) || 0;
-        amtInput.value = currentVal + amount;
-    }
-
-    // ۳۔ مینو تبدیل کرنے کا سسٹم (Tabs Switching)
-    function switchTab(tabName) {
-        currentTab = tabName;
-        document.querySelectorAll('.tab-link').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+    // نیویگیشن ٹیبز سوئچ کرنا
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('active'));
         
-        if (tabName === 'daily') {
-            document.getElementById('dailySection').style.display = 'block';
-            event.target.classList.add('active');
-        } else if (tabName === 'udhar') {
-            document.getElementById('udharSection').style.display = 'block';
-            event.target.classList.add('active');
-        } else if (tabName === 'report') {
-            document.getElementById('reportSection').style.display = 'block';
-            event.target.classList.add('active');
-            renderMonthlyReport(); // گراف دوبارہ لوڈ کرنا
+        document.getElementById(tabId + 'Section').style.display = 'block';
+        event.currentTarget.classList.add('active');
+        
+        if (tabId === 'report') {
+            renderChart();
         }
     }
 
-    // ۴۔ نیا ریکارڈ (آمدنی، خرچہ، سیونگ) جمع کرنے کی لاجک
+    // 🧮 ان بلٹ اسمارٹ کیلکولیٹر کے فنکشنز
+    function toggleCalculator() {
+        const panel = document.getElementById('calculatorPanel');
+        panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function pressCalc(val) {
+        document.getElementById('calcScreen').value += val;
+    }
+
+    function clearCalc() {
+        document.getElementById('calcScreen').value = '';
+    }
+
+    function solveCalc() {
+        try {
+            let res = eval(document.getElementById('calcScreen').value);
+            if (res !== undefined) {
+                document.getElementById('calcScreen').value = res;
+                document.getElementById('txAmount').value = res; // خود بخود رقم والے خانے میں ٹرانسفر کریں
+            }
+        } catch(e) {
+            document.getElementById('calcScreen').value = 'Error';
+        }
+    }
+
+    function quickInput(val) {
+        let input = document.getElementById('txAmount');
+        let current = parseInt(input.value) || 0;
+        input.value = current + val;
+    }
+
+    // 💰 آمدنی، خرچہ اور سیونگ کا نظام (مع اکاؤنٹ والیٹ ٹریکنگ)
     function addRecord(type) {
-        const date = document.getElementById('txDate').value;
         const amount = parseFloat(document.getElementById('txAmount').value);
         const category = document.getElementById('txCategory').value;
-        const details = document.getElementById('txDetails').value.trim();
+        const details = document.getElementById('txDetails').value.trim() || "کوئی تفصیل نہیں";
+        const date = document.getElementById('txDate').value;
+        const wallet = document.querySelector('input[name="txWallet"]:checked').value;
 
-        if (!date || isNaN(amount) || amount <= 0) {
-            alert("براہ کرم صحیح رقم اور تاریخ درج کریں!");
+        if (!amount || amount <= 0) {
+            alert("براہ کرم درست رقم درج کریں!");
             return;
         }
 
         const newRecord = {
             id: Date.now(),
-            date,
-            amount,
-            category,
-            details: details || category,
-            type // 'income', 'expense', or 'savings'
+            type: type, // 'income', 'expense', 'savings'
+            wallet: wallet, // 'cash', 'bank'
+            amount: amount,
+            category: category,
+            details: details,
+            date: date
         };
 
         records.unshift(newRecord);
-        saveAndRefresh();
+        localStorage.setItem('hisaab_records_v3', JSON.stringify(records));
         
-        // خانے خالی کرنا
+        // فارم صاف کرنا
         document.getElementById('txAmount').value = '';
         document.getElementById('txDetails').value = '';
-        alert("ریکارڈ کامیابی سے درج ہو گیا!");
+        document.getElementById('calculatorPanel').style.display = 'none';
+        document.getElementById('calcScreen').value = '';
+
+        updateDashboard();
     }
 
-    // ۵۔ کسٹمر کا نیا ادھار کھاتہ کھولنا
+    // 🤝 ادھار کھاتہ کا نظام
     function addUdhar(type) {
         const name = document.getElementById('udharName').value.trim();
         const amount = parseFloat(document.getElementById('udharAmount').value);
 
-        if (!name || isNaN(amount) || amount <= 0) {
-            alert("براہ کرم بندے کا نام اور صحیح رقم لکھیں!");
+        if (!name || !amount || amount <= 0) {
+            alert("براہ کرم نام اور درست رقم درج کریں!");
             return;
         }
 
         const newUdhar = {
             id: Date.now(),
-            name,
-            amount,
-            type, // 'borrowed' (دینا ہے) یا 'lent' (لینا ہے)
+            name: name,
+            type: type, // 'borrowed' (دینے ہیں), 'lent' (لینے ہیں)
+            amount: amount,
             date: new Date().toISOString().split('T')[0]
         };
 
         udharRecords.unshift(newUdhar);
-        localStorage.setItem('udhar_records', JSON.stringify(udharRecords));
+        localStorage.setItem('hisaab_udhar_v3', JSON.stringify(udharRecords));
+
         document.getElementById('udharName').value = '';
         document.getElementById('udharAmount').value = '';
-        
+
         updateDashboard();
-        renderUdharRecords();
-        alert("ادھار کا کھاتہ اپڈیٹ ہو گیا!");
     }
 
-    // ۶۔ ڈیش بورڈ کی ریاضی اور کیلکولیشنز
-    function updateDashboard() {
-        let inc = 0, exp = 0, sav = 0, bor = 0, lnt = 0;
-
-        records.forEach(r => {
-            if (r.type === 'income') inc += r.amount;
-            if (r.type === 'expense') exp += r.amount;
-            if (r.type === 'savings') sav += r.amount;
-        });
-
-        udharRecords.forEach(u => {
-            if (u.type === 'borrowed') bor += u.amount;
-            if (u.type === 'lent') lnt += u.amount;
-        });
-
-        let bal = inc - exp - sav;
-
-        document.getElementById('totalIncome').innerText = inc.toLocaleString();
-        document.getElementById('totalExpense').innerText = exp.toLocaleString();
-        document.getElementById('totalBalance').innerText = bal.toLocaleString();
-        document.getElementById('totalSavings').innerText = sav.toLocaleString();
-        document.getElementById('totalBorrowed').innerText = bor.toLocaleString();
-        document.getElementById('totalLent').innerText = lnt.toLocaleString();
+    // ریکارڈز ڈیلیٹ کرنا
+    function deleteDaily(id) {
+        records = records.filter(r => r.id !== id);
+        localStorage.setItem('hisaab_records_v3', JSON.stringify(records));
+        updateDashboard();
     }
 
-    // ۷۔ روزانہ کی لسٹ اسکرین پر دکھانا
-    function renderDailyRecords(filteredList = null) {
-        const listDiv = document.getElementById('dailyRecordsList');
-        listDiv.innerHTML = '';
-        const listToDisplay = filteredList || records;
+    function deleteUdhar(id) {
+        udharRecords = udharRecords.filter(u => u.id !== id);
+        localStorage.setItem('hisaab_udhar_v3', JSON.stringify(udharRecords));
+        updateDashboard();
+    }
 
-        if (listToDisplay.length === 0) {
-            listDiv.innerHTML = '<div style="text-align:center; opacity:0.6; padding:15px; font-size:13px;">کوئی ریکارڈ دستیاب نہیں ہے۔</div>';
+    // 🏷️ کیٹیگری ٹیگز فلٹر لاجک
+    function filterByCategory(cat) {
+        selectedCategoryFilter = cat;
+        document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        filterRecords();
+    }
+
+    // سرچ اور کیٹیگریز کے فلٹرز کو اکٹھا چلانا
+    function filterRecords() {
+        const searchVal = document.getElementById('searchBar').value.toLowerCase();
+        const listContainer = document.getElementById('dailyRecordsList');
+        listContainer.innerHTML = '';
+
+        const filtered = records.filter(r => {
+            const matchesSearch = r.category.toLowerCase().includes(searchVal) || r.details.toLowerCase().includes(searchVal);
+            const matchesCategory = (selectedCategoryFilter === 'all' || r.category === selectedCategoryFilter);
+            return matchesSearch && matchesCategory;
+        });
+
+        if (filtered.length === 0) {
+            listContainer.innerHTML = '<div style="text-align:center; font-size:12px; opacity:0.6; padding:15px;">کوئی ریکارڈ نہیں ملا!</div>';
             return;
         }
 
-        listToDisplay.forEach(r => {
-            let typeLabel = r.type === 'income' ? 'آمدنی' : r.type === 'expense' ? 'خرچہ' : 'سیونگ';
+        filtered.forEach(r => {
             let color = r.type === 'income' ? '#10b981' : r.type === 'expense' ? '#ef4444' : '#f59e0b';
-            
-            listDiv.innerHTML += `
+            let label = r.type === 'income' ? 'آمدنی' : r.type === 'expense' ? 'خرچہ' : 'سیونگ';
+            let walletLabel = r.wallet === 'cash' ? '💵 کیش' : '💳 بینک';
+
+            listContainer.innerHTML += `
                 <div class="record-item">
                     <div class="record-details">
-                        <span class="record-title">${r.details}</span>
-                        <span class="record-meta">${r.date} | کیٹیگری: ${r.category}</span>
+                        <div class="record-title">${r.category} <span style="font-size:11px; font-weight:normal; opacity:0.7;">(${r.details})</span></div>
+                        <div class="record-meta"><i class="far fa-calendar-alt"></i> ${r.date} | ${walletLabel}</div>
                     </div>
-                    <div style="text-align: left;">
-                        <div style="font-weight:700; color:${color};">Rs ${r.amount.toLocaleString()}</div>
-                        <span class="record-badge">${typeLabel}</span>
-                        <i class="fas fa-trash-alt" style="color:#ef4444; margin-right:10px; cursor:pointer;" onclick="deleteDaily(${r.id})"></i>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="record-badge" style="color: ${color};">${label}</span>
+                        <div style="font-weight: 700; color: ${color};">Rs ${r.amount}</div>
+                        <button onclick="deleteDaily(${r.id})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:14px;"><i class="fas fa-trash-alt"></i></button>
                     </div>
-                </div>`;
+                </div>
+            `;
         });
     }
 
-    // ۸۔ کسٹمر پروفائل اور ادھار لسٹ رینڈر کرنا
-    function renderUdharRecords() {
-        const listDiv = document.getElementById('udharRecordsList');
-        listDiv.innerHTML = '';
+    // 📊 مین ڈیش بورڈ کیلکولیشنز اور اپڈیٹس (کیش، بینک، ادھار فائنل ریاضی)
+    function updateDashboard() {
+        let inc = 0, exp = 0, sav = 0;
+        let cashBalance = 0, bankBalance = 0;
+        let borrowed = 0, lent = 0;
+
+        // آمدنی، خرچہ اور والیٹ وائز بیلنس کا لائیو فارمولا
+        records.forEach(r => {
+            if (r.type === 'income') {
+                inc += r.amount;
+                if (r.wallet === 'cash') cashBalance += r.amount;
+                if (r.wallet === 'bank') bankBalance += r.amount;
+            } else if (r.type === 'expense') {
+                exp += r.amount;
+                if (r.wallet === 'cash') cashBalance -= r.amount;
+                if (r.wallet === 'bank') bankBalance -= r.amount;
+            } else if (r.type === 'savings') {
+                sav += r.amount;
+                if (r.wallet === 'cash') cashBalance -= r.amount; // نقد میں سے بچت ہو کر لاک ہوئی
+                if (r.wallet === 'bank') bankBalance -= r.amount;
+            }
+        });
+
+        // ادھار کی حساب کتاب
+        udharRecords.forEach(u => {
+            if (u.type === 'borrowed') borrowed += u.amount;
+            if (u.type === 'lent') lent += u.amount;
+        });
+
+        // سکرین پر لائیو ڈیٹا دکھانا
+        document.getElementById('totalIncome').innerText = inc.toLocaleString();
+        document.getElementById('totalExpense').innerText = exp.toLocaleString();
+        document.getElementById('totalCash').innerText = cashBalance.toLocaleString();
+        document.getElementById('totalBank').innerText = bankBalance.toLocaleString();
+        document.getElementById('totalBorrowed').innerText = borrowed.toLocaleString();
+        document.getElementById('totalLent').innerText = lent.toLocaleString();
+
+        filterRecords();
+        updateUdharList();
+        updateSummaryReport();
+    }
+
+    // ادھار کارڈز کی لسٹ اپڈیٹ کرنا
+    function updateUdharList() {
+        const list = document.getElementById('udharRecordsList');
+        list.innerHTML = '';
 
         if (udharRecords.length === 0) {
-            listDiv.innerHTML = '<div style="text-align:center; opacity:0.6; padding:15px; font-size:13px;">کوئی ادھار کھاتہ موجود نہیں ہے۔</div>';
+            list.innerHTML = '<div style="text-align:center; font-size:12px; opacity:0.6; padding:15px;">ادھار کھاتہ بالکل صاف ہے!</div>';
             return;
         }
 
         udharRecords.forEach(u => {
-            let label = u.type === 'borrowed' ? 'ہم نے دینے ہیں' : 'ہم نے لینے ہیں';
+            let label = u.type === 'borrowed' ? 'لیا (واپس دینا ہے)' : 'دیا (واپس لینا ہے)';
             let color = u.type === 'borrowed' ? '#8b5cf6' : '#ec4899';
-            
-            listDiv.innerHTML += `
-                <div class="record-item" style="border-right: 4px solid ${color};">
+
+            list.innerHTML += `
+                <div class="record-item" style="border-left: 4px solid ${color};">
                     <div class="record-details">
-                        <span class="record-title"><i class="fas fa-user"></i> ${u.name}</span>
-                        <span class="record-meta">کھولنے کی تاریخ: ${u.date}</span>
+                        <div class="record-title">${u.name}</div>
+                        <div class="record-meta"><i class="far fa-clock"></i> ${label} - ${u.date}</div>
                     </div>
-                    <div style="text-align: left;">
-                        <div style="font-weight:700; color:${color};">Rs ${u.amount.toLocaleString()}</div>
-                        <span class="record-badge">${label}</span>
-                        <i class="fas fa-check-double" style="color:#10b981; margin-right:10px; cursor:pointer;" title="کھاتہ صاف کریں" onclick="deleteUdhar(${u.id})"></i>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="font-weight: 700; color: ${color};">Rs ${u.amount}</div>
+                        <button onclick="deleteUdhar(${u.id})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:14px;"><i class="fas fa-check-double"></i> صاف</button>
                     </div>
-                </div>`;
+                </div>
+            `;
         });
     }
 
-    // ۹۔ ایڈوانس لائیو سرچ فلٹر بار
-    function filterRecords() {
-        const query = document.getElementById('searchBar').value.toLowerCase();
-        const filtered = records.filter(r => 
-            r.category.toLowerCase().includes(query) || 
-            r.details.toLowerCase().includes(query) || 
-            r.date.includes(query)
-        );
-        renderDailyRecords(filtered);
-    }
+    // ٹیکسٹ رپورٹ سمری تیار کرنا
+    function updateSummaryReport() {
+        const summaryList = document.getElementById('monthlySummaryList');
+        summaryList.innerHTML = '';
 
-    // ۱۰۔ جادوئی پریمیم گراف چارٹ اور سمری رپورٹ
-    function renderMonthlyReport() {
-        const summaryDiv = document.getElementById('monthlySummaryList');
-        summaryDiv.innerHTML = '';
-        
         let catTotals = {};
         let totalExp = 0;
 
@@ -716,123 +827,84 @@
         });
 
         if (totalExp === 0) {
-            summaryDiv.innerHTML = '<div style="text-align:center; opacity:0.6; padding:15px; font-size:13px;">گراف دکھانے کے لیے کوئی خرچہ درج کریں!</div>';
-            if(myChart) myChart.destroy();
+            summaryList.innerHTML = '<div style="text-align:center; font-size:12px; opacity:0.6; padding:15px;">خرچوں کا کوئی ریکارڈ موجود نہیں ہے۔</div>';
             return;
         }
 
-        // ٹیکسٹ سمری لسٹ بنانا
         for (let cat in catTotals) {
-            let pct = ((catTotals[cat] / totalExp) * 100).toFixed(1);
-            summaryDiv.innerHTML += `
+            let amt = catTotals[cat];
+            let pct = ((amt / totalExp) * 100).toFixed(1);
+            summaryList.innerHTML += `
                 <div class="record-item">
-                    <span class="record-title">${cat}</span>
-                    <span class="record-title" style="color:#ef4444;">Rs ${catTotals[cat].toLocaleString()} (${pct}%)</span>
-                </div>`;
+                    <div class="record-title">${cat}</div>
+                    <div style="font-weight:700;">Rs ${amt.toLocaleString()} <span style="font-size:11px; font-weight:normal; opacity:0.6;">(${pct}%)</span></div>
+                </div>
+            `;
         }
+    }
 
-        // پریمیم گول گراف (Pie Chart) ڈیزائن لاجک
+    // 🥧 خوبصورت ماڈرن پائی چارٹ (Graph Chart) رینڈر کرنا
+    function renderChart() {
+        let catTotals = {};
+        records.forEach(r => {
+            if (r.type === 'expense') {
+                catTotals[r.category] = (catTotals[r.category] || 0) + r.amount;
+            }
+        });
+
+        const labels = Object.keys(catTotals);
+        const data = Object.values(catTotals);
+
+        if (myChart) { myChart.destroy(); }
+
+        if (labels.length === 0) return;
+
         const ctx = document.getElementById('monthlyPieChart').getContext('2d');
-        if (myChart) myChart.destroy(); // پرانا چارٹ صاف کرنا
-
         myChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: Object.keys(catTotals),
+                labels: labels,
                 datasets: [{
-                    data: Object.values(catTotals),
-                    backgroundColor: ['#ef4444', '#3b82f6', '#f59e0b', '#10b981', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f43f5e', '#a855f7'],
-                    borderWidth: 1
+                    data: data,
+                    backgroundColor: ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#0ea5e9', '#f43f5e', '#14b8a6', '#a855f7']
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: { display: false } // جگہ بچانے کے لیے نیچے لیجنڈ ہٹا دیا
-                }
+                plugins: { legend: { display: false } }
             }
         });
     }
 
-    // ۱۱۔ فکسڈ ماہانہ خرچوں کا آٹو مینیجر (کمیٹی وغیرہ کے لیے)
-    function checkAutoMonthlyExpenses() {
-        const today = new Date();
-        const lastChecked = localStorage.getItem('last_auto_month_check');
-        const currentMonthKey = today.getFullYear() + '-' + (today.getMonth() + 1);
-
-        // اگر نئے مہینے کی پہلی تاریخ ہے اور پہلے چیک نہیں ہوا
-        if (today.getDate() === 1 && lastChecked !== currentMonthKey) {
-            // آٹو انٹرنیٹ بل اینٹری
-            records.unshift({
-                id: Date.now() + 1,
-                date: today.toISOString().split('T')[0],
-                amount: 1500, // مروجہ فکسڈ رقم
-                category: 'انٹرنیٹ بل',
-                details: 'آٹو ایڈ: ماہانہ انٹرنیٹ پیکیج بل',
-                type: 'expense'
-            });
-
-            localStorage.setItem('last_auto_month_check', currentMonthKey);
-            localStorage.setItem('budget_records', JSON.stringify(records));
-        }
-    }
-
-    // ۱۲۔ ایکسل فائل / لائف ٹائم کلاؤڈ بیک اپ ڈیٹا کا پاپ اپ مینیجر
+    // 💾 بیک اپ ایکسل فائل مینوئل ڈاؤنلوڈر (بغیر کسی پاپ اپ یا سر درد کے)
     function exportToExcel() {
-    if (records.length === 0) {
-        alert("بیک اپ لینے کے لیے کھاتے میں کم از کم ایک اینٹری ہونا لازمی ہے!");
-        return;
-    }
-
-    // اردو الفاظ کو ایکسل میں صحیح دکھانے کے لیے سیٹنگ
-    let csvContent = "\uFEFF"; 
-    csvContent += "Type,Date,Category,Details,Amount\n";
-    
-    records.forEach(r => {
-        let typeLabel = r.type === 'income' ? 'آمدنی' : r.type === 'expense' ? 'خرچہ' : 'سیونگ';
-        let cleanDetails = r.details.replace(/,/g, " ");
-        csvContent += `${typeLabel},${r.date},${r.category},${cleanDetails},${r.amount}\n`;
-    });
-
-    // موبائل کریش سے بچانے کے لیے کلاسک بلاب لاجک
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `Hisaab_Kitaab_Backup_${new Date().toISOString().split('T')[0]}.csv`);
-    
-    document.body.appendChild(link);
-    link.click();
-    
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    
-    alert("🚀 مبارک ہو عاصم بھائی! کھاتے کا لائف ٹائم بیک اپ کامیابی سے ڈاؤن لوڈ ہو گیا ہے۔");
-    }
-    
-
-    // ۱۳۔ ڈیلیٹ کرنے کے فنکشنز
-    function deleteDaily(id) {
-        if(confirm("کیا آپ واقعی یہ ریکارڈ مٹانا چاہتے ہیں؟")) {
-            records = records.filter(r => r.id !== id);
-            saveAndRefresh();
+        if (records.length === 0) {
+            alert("بیک اپ لینے کے لیے کھاتے میں ڈیٹا ہونا لازمی ہے!");
+            return;
         }
-    }
 
-    function deleteUdhar(id) {
-        if(confirm("کیا یہ کھاتہ پورا کلیئر (برابر) ہو گیا ہے؟")) {
-            udharRecords = udharRecords.filter(u => u.id !== id);
-            localStorage.setItem('udhar_records', JSON.stringify(udharRecords));
-            updateDashboard();
-            renderUdharRecords();
-        }
-    }
+        let csvContent = "\uFEFF"; 
+        csvContent += "قسم کھاتہ,تاریخ,کیٹیگری,تفصیل,رقم,والٹ\n";
+        
+        records.forEach(r => {
+            let typeLabel = r.type === 'income' ? 'آمدنی' : r.type === 'expense' ? 'خرچہ' : 'سیونگ';
+            let walletLabel = r.wallet === 'cash' ? 'کیش' : 'بینک';
+            let cleanDetails = r.details.replace(/,/g, " ");
+            csvContent += `${typeLabel},${r.date},${r.category},${cleanDetails},${r.amount},${walletLabel}\n`;
+        });
 
-    function saveAndRefresh() {
-        localStorage.setItem('budget_records', JSON.stringify(records));
-        updateDashboard();
-        renderDailyRecords();
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Hisaab_Kitaab_V3_Backup_${new Date().toISOString().split('T')[0]}.csv`);
+        
+        document.body.appendChild(link);
+        link.click();
+        
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     }
 </script>
 </body>
