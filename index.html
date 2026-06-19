@@ -3,32 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hisaab Kitaab Pro</title>
+    <title>Hisaab Kitaab Pro 5.0</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; padding: 10px; }
-        .card { background: white; padding: 15px; margin: 10px 0; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        input, select, button { width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #ddd; }
-        .btn-green { background: #28a745; color: white; border: none; }
-        .btn-red { background: #dc3545; color: white; border: none; }
+        body { font-family: sans-serif; background: #f4f7f6; padding: 15px; }
+        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn-green { background: #00c853; color: white; border: none; font-weight: bold; }
+        .btn-red { background: #ff5252; color: white; border: none; font-weight: bold; }
+        .item { border-bottom: 1px solid #eee; padding: 10px 0; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
-    <div id="login" class="card" style="text-align:center;">
-        <h3>پن کوڈ درج کریں</h3>
-        <input type="password" id="pinInput" placeholder="پن درج کریں...">
-        <button onclick="checkPin()">ان لاک کریں</button>
+    <!-- پن کوڈ اسکرین -->
+    <div id="pinScreen" class="card" style="text-align:center;">
+        <h3>وی آئی پی لاگ ان 🔒</h3>
+        <input type="password" id="pinInput" placeholder="پن کوڈ (2917)">
+        <button class="btn-green" onclick="checkPin()">ان لاک</button>
     </div>
 
+    <!-- اصل ایپ -->
     <div id="app" style="display:none;">
-        <h2 style="text-align:center;">حساب کتاب 5.0</h2>
-        <div class="card"><h3 id="totalDisplay">ٹوٹل: 0 روپے</h3></div>
-        <div class="card">
-            <input type="number" id="amount" placeholder="رقم">
-            <input type="text" id="desc" placeholder="تفصیل">
-            <button class="btn-green" onclick="saveData('income')">آمدنی</button>
-            <button class="btn-red" onclick="saveData('expense')">خرچہ</button>
+        <h2 style="text-align:center;">حساب کتاب 5.0 پرو 🚀</h2>
+        <div class="grid">
+            <div class="card"><h5>ٹوٹل آمدنی</h5><h3 id="totalInc">Rs 0</h3></div>
+            <div class="card"><h5>ٹوٹل خرچہ</h5><h3 id="totalExp">Rs 0</h3></div>
         </div>
-        <div id="list"></div>
+        <div class="card">
+            <input type="date" id="date">
+            <select id="account"><option value="cash">کیش (جیب)</option><option value="bank">بینک / ایزی پیسہ</option></select>
+            <input type="number" id="amount" placeholder="رقم درج کریں">
+            <input type="text" id="desc" placeholder="تفصیل...">
+            <div class="grid">
+                <button class="btn-green" onclick="save('income')">آمدنی</button>
+                <button class="btn-red" onclick="save('expense')">خرچہ</button>
+            </div>
+        </div>
+        <div class="card" id="list"></div>
     </div>
 
     <script type="module">
@@ -45,35 +56,37 @@
             measurementId: "G-Y07XTW1ZH2"
         };
         const db = getFirestore(initializeApp(firebaseConfig));
-        const GROUP = "bros_group_01";
+        const GROUP = "bros_group_01"; // یہ وہ آئی ڈی ہے جو آپ تینوں کو جوڑے گی
 
         window.checkPin = () => {
             if(document.getElementById('pinInput').value == "2917") {
-                document.getElementById('login').style.display = 'none';
+                document.getElementById('pinScreen').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
                 loadData();
             } else { alert("غلط پن!"); }
         };
 
-        window.saveData = async (type) => {
+        window.save = async (type) => {
+            const amt = document.getElementById('amount').value;
             await addDoc(collection(db, "hisaab_data"), {
-                amount: parseInt(document.getElementById('amount').value),
-                desc: document.getElementById('desc').value,
-                type: type, groupId: GROUP
+                amount: Number(amt), type: type, desc: document.getElementById('desc').value,
+                date: document.getElementById('date').value, groupId: GROUP
             });
+            alert("محفوظ ہو گیا!");
             loadData();
         };
 
         window.loadData = async () => {
             const q = query(collection(db, "hisaab_data"), where("groupId", "==", GROUP));
             const snap = await getDocs(q);
-            let t = 0; let html = "";
+            let inc=0, exp=0, html="";
             snap.forEach(d => {
                 let data = d.data();
-                t += (data.type == 'income' ? data.amount : -data.amount);
-                html += `<div class='card'>${data.desc}: ${data.amount} روپے</div>`;
+                if(data.type == 'income') inc += data.amount; else exp += data.amount;
+                html += `<div class='item'><span>${data.desc}</span> <b>${data.amount}</b></div>`;
             });
-            document.getElementById('totalDisplay').innerText = "ٹوٹل: " + t + " روپے";
+            document.getElementById('totalInc').innerText = "Rs " + inc;
+            document.getElementById('totalExp').innerText = "Rs " + exp;
             document.getElementById('list').innerHTML = html;
         };
     </script>
