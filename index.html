@@ -2,93 +2,107 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hisaab Kitaab Pro 5.0</title>
+    <title>Daily Budget Pro</title>
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; padding: 15px; }
-        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 15px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn-green { background: #00c853; color: white; border: none; font-weight: bold; }
-        .btn-red { background: #ff5252; color: white; border: none; font-weight: bold; }
-        .item { border-bottom: 1px solid #eee; padding: 10px 0; display: flex; justify-content: space-between; }
+        body { font-family: sans-serif; background: #f4f4f4; padding: 10px; }
+        .login-box { background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input[type="password"] { width: 80%; padding: 15px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 18px; text-align: center; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <!-- پن کوڈ اسکرین -->
-    <div id="pinScreen" class="card" style="text-align:center;">
-        <h3>وی آئی پی لاگ ان 🔒</h3>
-        <input type="password" id="pinInput" placeholder="پن کوڈ (2917)">
-        <button class="btn-green" onclick="checkPin()">ان لاک</button>
+
+    <!-- سیکیورٹی اسکرین -->
+    <div id="loginScreen" class="login-box">
+        <h3>ایپ کو ان لاک کریں 🔒</h3>
+        <input type="password" id="pinInput" placeholder="پن درج کریں" maxlength="4">
+        <br>
+        <button onclick="verifyPin()" style="padding: 10px 30px; background: #28a745; color: white; border: none; border-radius: 5px;">ان لاک کریں</button>
     </div>
 
-    <!-- اصل ایپ -->
-    <div id="app" style="display:none;">
-        <h2 style="text-align:center;">حساب کتاب 5.0 پرو 🚀</h2>
-        <div class="grid">
-            <div class="card"><h5>ٹوٹل آمدنی</h5><h3 id="totalInc">Rs 0</h3></div>
-            <div class="card"><h5>ٹوٹل خرچہ</h5><h3 id="totalExp">Rs 0</h3></div>
-        </div>
-        <div class="card">
-            <input type="date" id="date">
-            <select id="account"><option value="cash">کیش (جیب)</option><option value="bank">بینک / ایزی پیسہ</option></select>
-            <input type="number" id="amount" placeholder="رقم درج کریں">
-            <input type="text" id="desc" placeholder="تفصیل...">
-            <div class="grid">
-                <button class="btn-green" onclick="save('income')">آمدنی</button>
-                <button class="btn-red" onclick="save('expense')">خرچہ</button>
-            </div>
-        </div>
-        <div class="card" id="list"></div>
+    <!-- اصل ایپ کا کنٹینر -->
+    <div id="mainApp" class="hidden">
+        <h2>حساب کتاب 5.0</h2>
+        <!-- یہاں باقی ڈیزائن (حصہ 2، 3، 4) آئے گا -->
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyBHpBbHUqTR-q1MdxJEzguJIkuixkxVLBI",
-            authDomain: "hisaabkitaab-13d52.firebaseapp.com",
-            projectId: "hisaabkitaab-13d52",
-            storageBucket: "hisaabkitaab-13d52.firebasestorage.app",
-            messagingSenderId: "194563862363",
-            appId: "1:194563862363:web:536f2deae7dda9358cf47e",
-            measurementId: "G-Y07XTW1ZH2"
-        };
-        const db = getFirestore(initializeApp(firebaseConfig));
-        const GROUP = "bros_group_01"; // یہ وہ آئی ڈی ہے جو آپ تینوں کو جوڑے گی
-
-        window.checkPin = () => {
-            if(document.getElementById('pinInput').value == "2917") {
-                document.getElementById('pinScreen').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
-                loadData();
-            } else { alert("غلط پن!"); }
-        };
-
-        window.save = async (type) => {
-            const amt = document.getElementById('amount').value;
-            await addDoc(collection(db, "hisaab_data"), {
-                amount: Number(amt), type: type, desc: document.getElementById('desc').value,
-                date: document.getElementById('date').value, groupId: GROUP
-            });
-            alert("محفوظ ہو گیا!");
-            loadData();
-        };
-
-        window.loadData = async () => {
-            const q = query(collection(db, "hisaab_data"), where("groupId", "==", GROUP));
-            const snap = await getDocs(q);
-            let inc=0, exp=0, html="";
-            snap.forEach(d => {
-                let data = d.data();
-                if(data.type == 'income') inc += data.amount; else exp += data.amount;
-                html += `<div class='item'><span>${data.desc}</span> <b>${data.amount}</b></div>`;
-            });
-            document.getElementById('totalInc').innerText = "Rs " + inc;
-            document.getElementById('totalExp').innerText = "Rs " + exp;
-            document.getElementById('list').innerHTML = html;
-        };
+    <script>
+        function verifyPin() {
+            const pin = document.getElementById("pinInput").value;
+            if(pin === "2917") {
+                document.getElementById("loginScreen").classList.add("hidden");
+                document.getElementById("mainApp").classList.remove("hidden");
+            } else {
+                alert("غلط پن کوڈ!");
+            }
+        }
     </script>
 </body>
 </html>
+<!-- حصہ 2: ڈیش بورڈ -->
+<div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+    <div class="card" style="background: white; padding: 15px; border-radius: 10px; text-align: center;"><h5>ٹوٹل خرچہ</h5><h3 id="exp">Rs 0</h3></div>
+    <div class="card" style="background: white; padding: 15px; border-radius: 10px; text-align: center;"><h5>ٹوٹل آمدنی</h5><h3 id="inc">Rs 0</h3></div>
+    <div class="card" style="background: white; padding: 15px; border-radius: 10px; text-align: center;"><h5>کیش (جیب)</h5><h3 id="cash">Rs 0</h3></div>
+    <div class="card" style="background: white; padding: 15px; border-radius: 10px; text-align: center;"><h5>بینک / ایزی پیسہ</h5><h3 id="bank">Rs 0</h3></div>
+</div>
+<!-- حصہ 3: ان پٹ فارم -->
+<div class="card" style="background: white; padding: 15px; border-radius: 10px; margin-top: 20px;">
+    <input type="date" id="date" style="width: 100%; padding: 10px; margin: 5px 0;">
+    
+    <select id="category" style="width: 100%; padding: 10px; margin: 5px 0;">
+        <option value="ration">راشن</option>
+        <option value="medicine">دوائی</option>
+        <option value="petrol">پٹرول</option>
+        <option value="other">دیگر</option>
+    </select>
+
+    <input type="number" id="amount" placeholder="رقم درج کریں (روپے)" style="width: 100%; padding: 10px; margin: 5px 0;">
+    <input type="text" id="desc" placeholder="تفصیل لکھیں..." style="width: 100%; padding: 10px; margin: 5px 0;">
+
+    <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <button class="btn-green" onclick="saveData('income')" style="padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px;">آمدنی</button>
+        <button class="btn-red" onclick="saveData('expense')" style="padding: 10px; background: #dc3545; color: white; border: none; border-radius: 5px;">خرچہ</button>
+    </div>
+</div>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBHpBbHUqTR-q1MdxJEzguJIkuixkxVLBI",
+        authDomain: "hisaabkitaab-13d52.firebaseapp.com",
+        projectId: "hisaabkitaab-13d52",
+        storageBucket: "hisaabkitaab-13d52.firebasestorage.app",
+        messagingSenderId: "194563862363",
+        appId: "1:194563862363:web:536f2deae7dda9358cf47e",
+        measurementId: "G-Y07XTW1ZH2"
+    };
+    const db = getFirestore(initializeApp(firebaseConfig));
+    const GROUP = "bros_group_01"; // آپ تینوں بھائیوں کی آئی ڈی
+
+    window.saveData = async (type) => {
+        const amt = document.getElementById('amount').value;
+        const desc = document.getElementById('desc').value;
+        const cat = document.getElementById('category').value;
+        const date = document.getElementById('date').value;
+
+        await addDoc(collection(db, "hisaab_data"), {
+            amount: Number(amt), type: type, desc: desc, category: cat, date: date, groupId: GROUP
+        });
+        alert("ڈیٹا محفوظ ہو گیا!");
+        loadData();
+    };
+
+    window.loadData = async () => {
+        const q = query(collection(db, "hisaab_data"), where("groupId", "==", GROUP));
+        const snap = await getDocs(q);
+        let inc = 0, exp = 0;
+        snap.forEach(d => {
+            let data = d.data();
+            if(data.type == 'income') inc += data.amount; else exp += data.amount;
+        });
+        document.getElementById('inc').innerText = "Rs " + inc;
+        document.getElementById('exp').innerText = "Rs " + exp;
+    };
+</script>
