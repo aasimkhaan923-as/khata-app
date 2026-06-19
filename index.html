@@ -3,10 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Budget Pro 3.0</title>
+    <title>Hisaab Kitaab Pro</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; padding: 10px; }
+        .card { background: white; padding: 15px; margin: 10px 0; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input, select, button { width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #ddd; }
+        .btn-green { background: #28a745; color: white; border: none; }
+        .btn-red { background: #dc3545; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <div id="login" class="card" style="text-align:center;">
+        <h3>پن کوڈ درج کریں</h3>
+        <input type="password" id="pinInput" placeholder="پن درج کریں...">
+        <button onclick="checkPin()">ان لاک کریں</button>
+    </div>
+
+    <div id="app" style="display:none;">
+        <h2 style="text-align:center;">حساب کتاب 5.0</h2>
+        <div class="card"><h3 id="totalDisplay">ٹوٹل: 0 روپے</h3></div>
+        <div class="card">
+            <input type="number" id="amount" placeholder="رقم">
+            <input type="text" id="desc" placeholder="تفصیل">
+            <button class="btn-green" onclick="saveData('income')">آمدنی</button>
+            <button class="btn-red" onclick="saveData('expense')">خرچہ</button>
+        </div>
+        <div id="list"></div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+        
         const firebaseConfig = {
             apiKey: "AIzaSyBHpBbHUqTR-q1MdxJEzguJIkuixkxVLBI",
             authDomain: "hisaabkitaab-13d52.firebaseapp.com",
@@ -16,67 +44,38 @@
             appId: "1:194563862363:web:536f2deae7dda9358cf47e",
             measurementId: "G-Y07XTW1ZH2"
         };
-        const app = initializeApp(firebaseConfig);
-        window.db = getFirestore(app);
-        window.GROUP_ID = "bros_group_01";
-    </script>
-    <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f7f6; padding: 15px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-        input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; }
-        .btn-green { background: #00c853; color: white; border: none; }
-        .btn-red { background: #ff5252; color: white; border: none; }
-    </style>
-</head>
-<body>
-    <h2 style="text-align: center;">حساب کتاب ورژن 5.0 پرو 🚀</h2>
-    <div class="grid">
-        <div class="card"><h5>ٹوٹل خرچہ</h5><h3 id="totalExpense">Rs 0</h3></div>
-        <div class="card"><h5>ٹوٹل آمدنی</h5><h3 id="totalIncome">Rs 0</h3></div>
-        <div class="card"><h5>کیش (جیب)</h5><h3 id="cashBalance">Rs 0</h3></div>
-        <div class="card"><h5>بینک / ایزی پیسہ</h5><h3 id="bankBalance">Rs 0</h3></div>
-    </div>
-        <div class="card" style="margin-top: 20px;">
-        <input type="date" id="date">
-        <select id="account"><option value="cash">کیش (جیب)</option><option value="bank">بینک / ایزی پیسہ</option></select>
-        <input type="number" id="amount" placeholder="رقم درج کریں (روپے)">
-        <input type="text" id="desc" placeholder="تفصیل...">
-        <div class="grid">
-            <button class="btn-green" onclick="addData('income')">آمدنی</button>
-            <button class="btn-red" onclick="addData('expense')">خرچہ</button>
-        </div>
-        </div>
-            <script type="module">
-        import { collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-        
-        window.addData = async (type) => {
-            const amount = document.getElementById("amount").value;
-            await addDoc(collection(window.db, "hisaab_data"), {
-                amount: parseInt(amount),
-                type: type,
-                account: document.getElementById("account").value,
-                desc: document.getElementById("desc").value,
-                date: document.getElementById("date").value,
-                groupId: window.GROUP_ID
+        const db = getFirestore(initializeApp(firebaseConfig));
+        const GROUP = "bros_group_01";
+
+        window.checkPin = () => {
+            if(document.getElementById('pinInput').value == "2917") {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                loadData();
+            } else { alert("غلط پن!"); }
+        };
+
+        window.saveData = async (type) => {
+            await addDoc(collection(db, "hisaab_data"), {
+                amount: parseInt(document.getElementById('amount').value),
+                desc: document.getElementById('desc').value,
+                type: type, groupId: GROUP
             });
-            alert("ڈیٹا محفوظ ہو گیا!");
             loadData();
         };
 
         window.loadData = async () => {
-            const q = query(collection(window.db, "hisaab_data"), where("groupId", "==", window.GROUP_ID));
-            const querySnapshot = await getDocs(q);
-            let totalEx = 0, totalInc = 0;
-            querySnapshot.forEach((doc) => {
-                const d = doc.data();
-                if(d.type === 'expense') totalEx += d.amount;
-                else totalInc += d.amount;
+            const q = query(collection(db, "hisaab_data"), where("groupId", "==", GROUP));
+            const snap = await getDocs(q);
+            let t = 0; let html = "";
+            snap.forEach(d => {
+                let data = d.data();
+                t += (data.type == 'income' ? data.amount : -data.amount);
+                html += `<div class='card'>${data.desc}: ${data.amount} روپے</div>`;
             });
-            document.getElementById("totalExpense").innerText = "Rs " + totalEx;
-            document.getElementById("totalIncome").innerText = "Rs " + totalInc;
+            document.getElementById('totalDisplay').innerText = "ٹوٹل: " + t + " روپے";
+            document.getElementById('list').innerHTML = html;
         };
-        loadData();
     </script>
 </body>
 </html>
