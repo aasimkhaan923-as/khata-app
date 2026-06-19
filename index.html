@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حساب کتاب ورڑن 1.0</title>
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -88,10 +89,11 @@
         .card.expense { border-top-color: #c62828; color: #c62828; }
         .card.balance { border-top-color: #1565c0; color: #1565c0; }
         .card.savings { border-top-color: #ef6c00; color: #ef6c00; }
-        .card.debt { border-top-color: #6a1b9a; color: #6a1b9a; grid-column: span 2; }
+        .card.debt-gave { border-top-color: #6a1b9a; color: #6a1b9a; }
+        .card.debt-took { border-top-color: #303f9f; color: #303f9f; }
 
         .card h3 { font-size: 14px; margin-bottom: 5px; opacity: 0.8; color: var(--text-color); }
-        .card .amount { font-size: 20px; font-weight: bold; }
+        .card .amount { font-size: 18px; font-weight: bold; }
 
         .tabs {
             display: flex;
@@ -139,92 +141,6 @@
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 8px;
         }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-size: 15px;
-            outline: none;
-        }
-
-        .btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn {
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .btn-income { background-color: #2e7d32; }
-        .btn-expense { background-color: #c62828; }
-        .btn-savings { background-color: #ef6c00; }
-        .btn-submit { background-color: var(--primary-color); width: 100%; height: 45px; margin-top: 10px;}
-
-        .history-title {
-            font-size: 16px;
-            margin: 20px 0 10px 0;
-            font-weight: bold;
-        }
-
-        .list-item {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border-right: 5px solid #ccc;
-        }
-
-        .item-details div { font-size: 15px; font-weight: bold; text-align: right; }
-        .item-details small { color: #888; font-size: 12px; display: block; text-align: right; }
-        
-        .item-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .item-amount { font-weight: bold; font-size: 16px; }
-        .delete-btn { color: #c62828; cursor: pointer; background: none; border: none; font-size: 16px; padding: 5px; }
-        .paid-btn { background-color: #2e7d32; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; font-weight: bold; }
-
-        .report-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
     </style>
 </head>
 <body>
@@ -237,6 +153,7 @@
         </button>
     </div>
 
+    <!-- ڈیش بورڈ کے نئے الگ الگ خانے -->
     <div class="dashboard-grid">
         <div class="card income">
             <h3>ٹوٹل آمدنی</h3>
@@ -254,9 +171,13 @@
             <h3>سیونگ گلاک 💰</h3>
             <div class="amount">Rs <span id="totalSavings">0</span></div>
         </div>
-        <div class="card debt">
-            <h3>کل نیٹ ادھار (لینا / دینا)</h3>
-            <div class="amount">Rs <span id="totalDebt">0</span></div>
+        <div class="card debt-gave">
+            <h3>ادھار دیا (پیسے لینے ہیں)</h3>
+            <div class="amount">Rs <span id="totalDebtGave">0</span></div>
+        </div>
+        <div class="card debt-took">
+            <h3>ادھار لیا (پیسے دینے ہیں)</h3>
+            <div class="amount">Rs <span id="totalDebtTook">0</span></div>
         </div>
     </div>
 
@@ -266,6 +187,7 @@
         <button class="tab-btn" id="tab-report" onclick="switchTab('report')">ماہانہ رپورٹ</button>
     </div>
 
+    <!-- TAB 1: Daily Section -->
     <div id="dailySection" class="section active">
         <div class="section-title">آمدنی، خرچہ اور سیونگ درج کریں</div>
         
@@ -304,7 +226,9 @@
         <div class="history-title">آج کا لین دین کا ریکارڈ</div>
         <div id="dailyLogs"></div>
     </div>
-        <div id="udhaarSection" class="section">
+
+    <!-- TAB 2: Udhaar Section -->
+    <div id="udhaarSection" class="section">
         <div class="section-title">ادھار کھاتہ (لینا / دینا)</div>
         
         <div class="form-group">
@@ -332,7 +256,7 @@
         <div class="history-title">باقی ادھار کی لسٹ</div>
         <div id="debtLogs"></div>
     </div>
-
+        <!-- TAB 3: Reports Section -->
     <div id="reportSection" class="section">
         <div class="section-title">ماہانہ خرچوں کی رپورٹ</div>
         <div id="reportLogs"></div>
@@ -347,12 +271,10 @@
 
     // App Initialize
     document.addEventListener("DOMContentLoaded", () => {
-        // آٹومیٹک آج کی ڈیٹ سیٹ کرنا
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('txDate').value = today;
         document.getElementById('debtDate').value = today;
         
-        // اپلائی تھیم اور کیلکولیشنز
         document.documentElement.setAttribute('data-theme', currentTheme);
         updateThemeUI();
         calculateEverything();
@@ -390,7 +312,6 @@
         }
     }
 
-    // Add Income/Expense/Savings
     function addTransaction(type) {
         const date = document.getElementById('txDate').value;
         const amount = parseFloat(document.getElementById('txAmount').value);
@@ -427,7 +348,6 @@
         saveAndRefresh();
     }
 
-    // Add Debt (Udhaar)
     function addDebt() {
         const date = document.getElementById('debtDate').value;
         const name = document.getElementById('debtName').value.trim();
@@ -456,7 +376,6 @@
         document.getElementById('debtAmount').value = '';
     }
 
-    // Settle Udhaar
     function settleDebt(id) {
         const debtIndex = debts.findIndex(d => d.id === id);
         if(debtIndex > -1) {
@@ -501,7 +420,6 @@
         calculateEverything();
     }
 
-    // Calculations & UI Sync
     function calculateEverything() {
         let inc = 0, exp = 0, sav = 0;
         
@@ -519,14 +437,16 @@
             if(d.type === 'took') debtTook += d.amount;
         });
 
-        let netDebt = debtGave - debtTook;
         let bal = inc - exp - sav;
 
         document.getElementById('totalIncome').innerText = inc.toLocaleString();
         document.getElementById('totalExpense').innerText = exp.toLocaleString();
         document.getElementById('totalSavings').innerText = sav.toLocaleString();
         document.getElementById('totalBalance').innerText = bal.toLocaleString();
-        document.getElementById('totalDebt').innerText = (netDebt >= 0 ? '+' : '') + netDebt.toLocaleString();
+        
+        // دونوں خانوں میں الگ الگ رقم شو کرنا
+        document.getElementById('totalDebtGave').innerText = debtGave.toLocaleString();
+        document.getElementById('totalDebtTook').innerText = debtTook.toLocaleString();
 
         renderDailyLogs();
         renderDebtLogs();
