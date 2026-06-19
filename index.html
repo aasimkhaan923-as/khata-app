@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حساب کتاب ورڑن 1.0</title>
+    <title>حساب کتاب ورڑن 1.1</title>
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,16 +11,18 @@
             --bg-color: #f4f6f9;
             --card-bg: #ffffff;
             --text-color: #333333;
-            --border-color: #e0e0e0;
+            --border-color: #cccccc;
             --primary-color: #1e3a8a;
+            --input-bg: #ffffff;
         }
 
         [data-theme="dark"] {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
             --text-color: #f5f5f5;
-            --border-color: #333333;
+            --border-color: #444444;
             --primary-color: #3b82f6;
+            --input-bg: #2a2a2a;
         }
 
         * {
@@ -135,11 +137,122 @@
 
         .section-title {
             font-size: 18px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: center;
             color: var(--primary-color);
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 8px;
+            font-weight: bold;
+        }
+
+        /* بکس کو فل سائز اور خوبصورت بنانے کا اسٹائل */
+        .form-group {
+            margin-bottom: 18px;
+            width: 100%;
+            display: block;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .form-control {
+            width: 100% !important;
+            display: block;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 16px;
+            outline: none;
+            transition: border 0.2s;
+            text-align: right;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* نئے بڑے اور جاندار بٹنز کا اسٹائل */
+        .grid-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .btn:active { opacity: 0.8; }
+        .btn-income { background-color: #2e7d32; }
+        .btn-expense { background-color: #c62828; }
+        
+        .full-button-container {
+            margin-top: 12px;
+            width: 100%;
+        }
+        
+        .btn-savings { background-color: #ef6c00; width: 100%; }
+        .btn-submit { background-color: var(--primary-color); width: 100%; }
+
+        .history-title {
+            font-size: 16px;
+            margin: 25px 0 12px 0;
+            font-weight: bold;
+            border-right: 4px solid var(--primary-color);
+            padding-right: 8px;
+        }
+
+        .list-item {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-right: 5px solid #ccc;
+        }
+
+        .item-details div { font-size: 15px; font-weight: bold; text-align: right; }
+        .item-details small { color: #888; font-size: 12px; display: block; text-align: right; margin-top: 4px; }
+        
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .item-amount { font-weight: bold; font-size: 16px; }
+        .delete-btn { color: #c62828; cursor: pointer; background: none; border: none; font-size: 16px; padding: 5px; }
+        .paid-btn { background-color: #2e7d32; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: bold; }
+
+        .report-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 15px;
         }
     </style>
 </head>
@@ -147,13 +260,13 @@
 
 <div class="container">
     <div class="header">
-        <h2>حساب کتاب ورڑن 1.0</h2>
+        <h2>حساب کتاب ورڑن 1.1</h2>
         <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
             <i class="fas fa-moon"></i> <span>نائٹ موڈ</span>
         </button>
     </div>
 
-    <!-- ڈیش بورڈ کے نئے الگ الگ خانے -->
+    <!-- ڈیش بورڈ گرڈ (6 الگ اور خوبصورت خانے) -->
     <div class="dashboard-grid">
         <div class="card income">
             <h3>ٹوٹل آمدنی</h3>
@@ -200,7 +313,7 @@
             <input type="number" id="txAmount" class="form-control" placeholder="مثال: 500">
         </div>
         <div class="form-group" id="categoryGroup">
-            <label>کیٹیگری (صرف خرچے کے لیے):</label>
+            <label>کیٹیگری (صرح خرچے کے لیے):</label>
             <select id="txCategory" class="form-control">
                 <option value="⛽ پٹرول / بائیک">⛽ پٹرول / بائیک</option>
                 <option value="🛒 گھر کا راشن">🛒 گھر کا راشن</option>
@@ -217,10 +330,14 @@
             <input type="text" id="txDesc" class="form-control" placeholder="تفصیل لکھیں...">
         </div>
 
-        <div class="btn-group">
+        <!-- آمدنی اور خرچہ کے بڑے بٹنز -->
+        <div class="grid-buttons">
             <button class="btn btn-income" onclick="addTransaction('income')"><i class="fas fa-plus"></i> آمدنی</button>
             <button class="btn btn-expense" onclick="addTransaction('expense')"><i class="fas fa-minus"></i> خرچہ</button>
-            <button class="btn btn-savings" onclick="addTransaction('savings')"><i class="fas fa-piggy-bank"></i> سیونگ</button>
+        </div>
+        <!-- سیونگ گلاک کا بڑا الگ بٹن نیچے -->
+        <div class="full-button-container">
+            <button class="btn btn-savings" onclick="addTransaction('savings')"><i class="fas fa-piggy-bank"></i> سیونگ گلاک میں ڈالیں</button>
         </div>
 
         <div class="history-title">آج کا لین دین کا ریکارڈ</div>
@@ -246,12 +363,14 @@
         <div class="form-group">
             <label>ادھار کی نوعیت:</label>
             <select id="debtType" class="form-control">
-                <option value="gave">ادھار دیا (میں نے پیسے دیے - وصول کرنے ہیں)</option>
+                <option value="gave">ادھار دیا (میں نے پیسے دیے - اصول کرنے ہیں)</option>
                 <option value="took">ادھار لیا (میں نے پیسے لیے - واپس کرنے ہیں)</option>
             </select>
         </div>
         
-        <button class="btn btn-submit" onclick="addDebt()">ادھار ریکارڈ کریں</button>
+        <div class="full-button-container">
+            <button class="btn btn-submit" onclick="addDebt()"><i class="fas fa-save"></i> ادھار ریکارڈ کریں</button>
+        </div>
 
         <div class="history-title">باقی ادھار کی لسٹ</div>
         <div id="debtLogs"></div>
@@ -444,7 +563,7 @@
         document.getElementById('totalSavings').innerText = sav.toLocaleString();
         document.getElementById('totalBalance').innerText = bal.toLocaleString();
         
-        // دونوں خانوں میں الگ الگ رقم شو کرنا
+        // الگ الگ ادھار کے خانوں کا حساب شو کرنا
         document.getElementById('totalDebtGave').innerText = debtGave.toLocaleString();
         document.getElementById('totalDebtTook').innerText = debtTook.toLocaleString();
 
