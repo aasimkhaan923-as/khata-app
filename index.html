@@ -4,502 +4,504 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ورژن 8.0</title>
-    
-    <!-- پریمیم آئیکنز اور خوبصورت اردو فونٹس کی لائبریریز -->
+    <!-- پریمیم فونٹس اور آئیکنز لنکس -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;600;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- گراف (Pie Chart) چلانے کے لیے تیز رفتار لائبریری -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* ڈیفالٹ لائٹ موڈ کے پریمیم کلرز - اب ایپ پہلے لائٹ موڈ میں کھلے گی */
         :root {
-            --bg-color: #f4f6f9;
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
             --text-color: #2b2d42;
-            --border-color: #e0e4ec;
-            --primary-color: #1e3a8a;
-            --input-bg: #ffffff;
-            --shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
-            --badge-bg: #f1f5f9;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary-gradient: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08);
         }
 
-        /* ڈارک موڈ کے شاہکار کلرز (VIP Dark Theme) */
         [data-theme="dark"] {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
             --text-color: #f8fafc;
+            --text-muted: #94a3b8;
             --border-color: #334155;
-            --primary-color: #3b82f6;
-            --input-bg: #0f172a;
-            --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            --badge-bg: #334155;
+            --primary-gradient: linear-gradient(135deg, #3b82f6, #1d4ed8);
         }
 
-        /* بنیادی مکھن سیٹنگز */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Noto Sans Arabic', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            transition: background-color 0.3s, border-color 0.3s;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding: 15px 15px 75px 15px; /* نیچے نیویگیشن کے لیے جگہ */
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
-        .container {
+        .app-container {
             width: 100%;
             max-width: 480px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            background: var(--bg-color);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            position: relative;
         }
 
-        /* ہیڈر ورژن 8.0 */
-        .header {
+        /* ٹاپ بار اسٹائلز */
+        .top-bar {
+            background: var(--card-bg);
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--card-bg);
-            padding: 16px 20px;
-            border-radius: 16px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
         }
 
-        .header h2 {
+        .app-title {
             font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-color);
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .theme-btn {
-            background: var(--badge-bg);
+        .theme-toggle-btn {
+            background: var(--bg-color);
             border: 1px solid var(--border-color);
-            font-size: 18px;
-            cursor: pointer;
-            padding: 8px;
+            color: var(--text-color);
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
-            width: 42px;
-            height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-color);
-        }
-
-        /* باٹم نیویگیشن بار (Tabs) */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--card-bg);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            background: none;
-            border: none;
-            color: var(--text-color);
-            opacity: 0.6;
-            font-size: 11px;
-            font-weight: 700;
             cursor: pointer;
-            flex: 1;
+            box-shadow: var(--shadow);
         }
-
-        .nav-item i {
-            font-size: 18px;
-        }
-
-        .nav-item.active {
-            color: var(--primary-color);
-            opacity: 1;
-        }
-
-        /* اسکرینز کنٹرولر */
-        .app-screen {
-            display: none;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .app-screen.active {
-            display: flex;
-        }
-                /* مین ڈیش بورڈ گرڈ */
-        .dashboard-grid {
+    </style>
+</head>
+    <style>
+        /* ڈیش بورڈ کارڈز اور گرڈ سسٹم */
+        .stat-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px;
+            padding: 15px;
         }
 
-        .card {
+        .stat-card {
             background: var(--card-bg);
             padding: 14px;
-            border-radius: 16px;
-            text-align: center;
+            border-radius: 14px;
+            border-top: 4px solid #3b82f6;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-        }
+        .stat-card.expense { border-top-color: #ef4444; }
+        .stat-card.income { border-top-color: #10b981; }
+        .stat-card.borrowed { border-top-color: #8b5cf6; }
+        .stat-card.lent { border-top-color: #ec4899; }
 
-        .card.income::before { background: #10b981; }
-        .card.expense::before { background: #ef4444; }
-        .card.cash::before { background: #0ea5e9; }
-        .card.bank::before { background: #6366f1; }
-        .card.borrowed::before { background: #8b5cf6; }
-        .card.lent::before { background: #ec4899; }
-
-        .card h3 {
-            font-size: 12px;
+        .stat-card h3 {
+            font-size: 11px;
+            color: var(--text-muted);
             font-weight: 600;
-            margin-bottom: 6px;
-            opacity: 0.8;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 6px;
+            gap: 4px;
         }
 
-        .card .amount {
+        .stat-card .amount {
             font-size: 18px;
             font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 2px;
         }
 
-        .card.income .amount { color: #10b981; }
-        .card.expense .amount { color: #ef4444; }
-        .card.cash .amount { color: #0ea5e9; }
-        .card.bank .amount { color: #6366f1; }
-        .card.borrowed .amount { color: #8b5cf6; }
-        .card.lent .amount { color: #ec4899; }
+        /* مین اسکرین کنٹینر اور کارڈ فارمیٹس */
+        .app-screen {
+            display: none;
+            padding: 10px 15px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
 
-        /* مین بکسز اور فارم اسٹائل */
-        .main-box {
+        .app-screen.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-card {
             background: var(--card-bg);
-            padding: 18px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: var(--shadow-lg);
             border: 1px solid var(--border-color);
+            margin-bottom: 15px;
         }
 
-        .box-title {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 14px;
-            color: var(--primary-color);
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
+            color: var(--text-color);
         }
 
+        /* ان پٹس اور بٹنز کے شاندار اسٹائلز */
         .form-group {
             margin-bottom: 12px;
         }
 
         .form-group label {
             display: block;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            opacity: 0.9;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 600;
         }
 
-        .form-control {
+        .input-style, select {
             width: 100%;
-            padding: 11px 14px;
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
+            padding: 11px 12px;
             border-radius: 10px;
-            font-size: 14px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 13px;
             outline: none;
         }
 
-        .form-control:focus {
-            border-color: var(--primary-color);
+        .input-style:focus, select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.1);
         }
 
-        /* کوئک رقم سلیکشن پلس پلس بٹنز */
-        .quick-amounts {
+        /* کھاتہ اور ادھار سوئچ بٹنز */
+        .toggle-group {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
-            margin-top: 8px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
         }
 
-        .q-btn {
-            padding: 8px;
-            background: var(--badge-bg);
+        .toggle-btn {
+            padding: 11px;
+            border-radius: 10px;
             border: 1px solid var(--border-color);
+            background: var(--card-bg);
             color: var(--text-color);
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
             text-align: center;
         }
 
-        .q-btn:active {
-            transform: scale(0.95);
+        .toggle-btn.active {
+            background: #1e3a8a;
+            color: white;
+            border-color: #1e3a8a;
         }
 
-        /* ایکشن اور والٹ ریڈیو بٹنز */
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 15px;
+        [data-theme="dark"] .toggle-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
         }
-
-        .wallet-selector {
+    </style>
+        <style>
+        /* جادوئی پلس پلس رقم والے کوئیک بٹنز */
+        .quick-amounts {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
             margin-bottom: 12px;
         }
 
-        .w-btn {
-            padding: 12px;
+        .quick-btn {
+            padding: 8px;
+            border-radius: 8px;
             border: 1px solid var(--border-color);
-            background: var(--card-bg);
+            background: var(--bg-color);
             color: var(--text-color);
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: bold;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
         }
 
-        .w-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
+        /* ایکشن بٹنز (جمع، خرچ، سیونگ) */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
         }
 
-        .action-btn {
-            padding: 12px;
+        .btn {
+            padding: 11px;
+            border-radius: 10px;
             border: none;
-            border-radius: 10px;
             color: white;
-            font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            gap: 4px;
         }
 
-        .btn-income { background: #10b981; }
         .btn-expense { background: #ef4444; }
+        .btn-income { background: #10b981; }
         .btn-savings { background: #f59e0b; }
 
-        /* ان بلٹ اسمارٹ کیلکولیٹر */
-        .calc-container {
-            display: none;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 10px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .calc-screen {
-            width: 100%;
-            padding: 10px;
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            text-align: left;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            outline: none;
-        }
-
-        .calc-btn-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+        /* لسٹ آئٹمز اور سرچ بار */
+        .search-wrapper { margin-bottom: 12px; }
+        .tag-cloud {
+            display: flex;
             gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
         }
 
-        .calc-btn {
-            padding: 12px;
-            background: var(--card-bg);
+        .tag-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
             border: 1px solid var(--border-color);
+            background: var(--card-bg);
             color: var(--text-color);
-            font-weight: 700;
-            font-size: 14px;
-            border-radius: 8px;
+            font-size: 11px;
+            white-space: nowrap;
             cursor: pointer;
         }
 
-        .calc-btn.op { background: var(--primary-color); color: #ffffff; }
-        .calc-btn.clear { background: #ef4444; color: #ffffff; }
-        .calc-btn.equal { background: #10b981; color: #ffffff; }
+        .tag-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
 
-        /* لائیو ریکارڈز لسٹ آئٹم */
+        .record-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
         .record-item {
+            background: var(--bg-color);
+            padding: 10px 12px;
+            border-radius: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .record-details h4 { font-size: 13px; font-weight: 600; }
+        .record-details p { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+        
+        .record-amount {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .clear-debt-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        /* ان بلٹ فلوٹنگ کیلکولیٹر */
+        .calc-panel {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .calc-btn {
+            padding: 10px;
             background: var(--bg-color);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            margin-bottom: 8px;
+            color: var(--text-color);
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        .record-details h4 { font-size: 13px; font-weight: 700; }
-        .record-details p { font-size: 11px; opacity: 0.6; margin-top: 2px; }
-        .record-amount { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 14px; }
-        
-        .delete-btn { color: #ef4444; cursor: pointer; border: none; background: none; font-size: 14px; }
-        .clear-debt-btn { background: #10b981; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
-
-        /* ہوریزونٹل سکول ٹیگز */
-        .category-tags-container {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
+        /* باٹم نیویگیشن بار */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             padding: 8px 0;
-            white-space: nowrap;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+            z-index: 100;
         }
-        .category-tags-container::-webkit-scrollbar { display: none; }
-        .tag-btn { padding: 6px 14px; background: var(--badge-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; }
-        .tag-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
 
-        .chart-box { display: flex; justify-content: center; align-items: center; padding: 10px; max-height: 220px; }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .nav-item i { font-size: 16px; }
     </style>
 </head>
-<!-- لائٹ موڈ ڈیفالٹ کے ساتھ اوپن ہوگا جیسا اسکرین شاٹ 8800.jpg میں لک فکس کرنا تھا -->
-<body data-theme="light">
-
-    <div class="container">
+<body>
+        <div class="app-container">
         
-        <!-- ہیڈر - اب صرف ورژن 8.0 شارٹ اور سویٹ -->
-        <div class="header">
-            <h2><i class="fas fa-wallet"></i> ورژن 8.0</h2>
-            <button class="theme-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-moon"></i></button>
+        <div class="top-bar">
+            <div class="app-title"><i class="fas fa-wallet"></i> ورژن 8.0</div>
+            <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-moon"></i></button>
         </div>
 
-        <!-- ================= اسکرین 1: روزانہ کا حساب ================= -->
-        <div id="screen-daily" class="app-screen active">
-            <div class="dashboard-grid">
-                <div class="card income">
-                    <h3><i class="fas fa-arrow-down"></i> کل آمدنی</h3>
-                    <div class="amount" id="totalIncome">Rs 0</div>
-                </div>
-                <div class="card expense">
-                    <h3><i class="fas fa-arrow-up"></i> کل خرچہ</h3>
-                    <div class="amount" id="totalExpense">Rs 0</div>
-                </div>
-                <div class="card cash">
-                    <h3><i class="fas fa-money-bill-wave"></i> کیش ان ہینڈ</h3>
-                    <div class="amount" id="totalCash">Rs 0</div>
-                </div>
-                <div class="card bank">
-                    <h3><i class="fas fa-university"></i> بینک / ایزی پیسہ</h3>
-                    <div class="amount" id="totalBank">Rs 0</div>
-                </div>
+        <div class="stat-grid">
+            <div class="stat-card income">
+                <h3><i class="fas fa-arrow-down"></i> کل آمدنی</h3>
+                <div class="amount" id="totalIncome">Rs 0</div>
             </div>
+            <div class="stat-card expense">
+                <h3><i class="fas fa-arrow-up"></i> کل خرچہ</h3>
+                <div class="amount" id="totalExpense">Rs 0</div>
+            </div>
+            <div class="stat-card borrowed">
+                <h3><i class="fas fa-hand-holding-usd"></i> کل ادھار لیا</h3>
+                <div class="amount" id="totalBorrowed">Rs 0</div>
+            </div>
+            <div class="stat-card lent">
+                <h3><i class="fas fa-hand-holding-heart"></i> کل ادھار دیا</h3>
+                <div class="amount" id="totalLent">Rs 0</div>
+            </div>
+        </div>
 
-            <div class="main-box">
-                <div class="box-title" style="justify-content: space-between;">
-                    <span><i class="fas fa-plus-circle"></i> آمدنی، خرچہ اور سیونگ درج کریں</span>
-                    <span style="cursor: pointer; color: var(--primary-color); font-size: 12px;" onclick="toggleCalc()">
-                        <i class="fas fa-calculator"></i> حساب لگائیں
+        <div id="screen-daily" class="app-screen active">
+            <div class="main-card">
+                <div class="card-title">
+                    <span><i class="fas fa-plus-circle"></i> نیا ریکارڈ درج کریں</span>
+                    <span style="cursor: pointer; color: #3b82f6; font-size: 12px; font-weight: bold;" onclick="toggleCalc()">
+                        <i class="fas fa-calculator"></i> کیلکولیٹر کھولیں
                     </span>
                 </div>
 
-                <!-- کیلکولیٹر پینل -->
-                <div class="calc-container" id="calcPanel">
-                    <input type="text" class="calc-screen" id="calcScreen" readonly placeholder="0">
-                    <div class="calc-btn-grid">
-                        <button class="calc-btn clear" onclick="clearCalc()">C</button>
-                        <button class="calc-btn op" onclick="pressCalc('/')">/</button>
-                        <button class="calc-btn op" onclick="pressCalc('*')">*</button>
-                        <button class="calc-btn op" onclick="pressCalc('-')">-</button>
+                <div class="calc-panel" id="calcPanel">
+                    <input type="text" class="input-style" id="calcScreen" readonly placeholder="0" style="text-align: left; font-size: 16px; font-weight: bold; margin-bottom: 6px;">
+                    <div class="calc-grid">
+                        <button class="calc-btn" style="background:#ef4444; color:white;" onclick="clearCalc()">C</button>
+                        <button class="calc-btn" style="background:#3b82f6; color:white;" onclick="pressCalc('/')">/</button>
+                        <button class="calc-btn" style="background:#3b82f6; color:white;" onclick="pressCalc('*')">*</button>
+                        <button class="calc-btn" style="background:#3b82f6; color:white;" onclick="pressCalc('-')">-</button>
                         <button class="calc-btn" onclick="pressCalc('7')">7</button>
                         <button class="calc-btn" onclick="pressCalc('8')">8</button>
                         <button class="calc-btn" onclick="pressCalc('9')">9</button>
-                        <button class="calc-btn op" onclick="pressCalc('+')">+</button>
+                        <button class="calc-btn" style="background:#3b82f6; color:white;" onclick="pressCalc('+')">+</button>
                         <button class="calc-btn" onclick="pressCalc('4')">4</button>
                         <button class="calc-btn" onclick="pressCalc('5')">5</button>
                         <button class="calc-btn" onclick="pressCalc('6')">6</button>
-                        <button class="calc-btn equal" onclick="solveCalc('=')">=</button>
+                        <button class="calc-btn" style="background:#10b981; color:white; grid-row: span 2; height: 100%;" onclick="solveCalc()">=</button>
                         <button class="calc-btn" onclick="pressCalc('1')">1</button>
                         <button class="calc-btn" onclick="pressCalc('2')">2</button>
                         <button class="calc-btn" onclick="pressCalc('3')">3</button>
-                        <button class="calc-btn" onclick="pressCalc('0')">0</button>
+                        <button class="calc-btn" style="grid-column: span 2;" onclick="pressCalc('0')">0</button>
+                        <button class="calc-btn" onclick="pressCalc('.')">.</button>
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-top: 10px;">
+                <div class="form-group">
                     <label>تاریخ منتخب کریں:</label>
-                    <input type="date" id="txDate" class="form-control">
+                    <input type="date" id="txDate" class="input-style">
                 </div>
 
                 <div class="form-group">
                     <label>کھاتا منتخب کریں (پیسے کہاں سے آئے/گئے؟):</label>
-                    <div class="wallet-selector">
-                        <button class="w-btn active" id="w-cash" onclick="setWallet('cash')">💵 کیش (جیب)</button>
-                        <button class="w-btn" id="w-bank" onclick="setWallet('bank')">🏦 بینک / ایزی پیسہ</button>
+                    <div class="toggle-group">
+                        <div class="toggle-btn active" id="w-cash" onclick="setWallet('cash')">💵 کیش (جیب)</div>
+                        <div class="toggle-btn" id="w-bank" onclick="setWallet('bank')">🏦 بینک / ایزی پیسہ</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>رقم درج کریں (روپے):</label>
-                    <input type="number" id="txAmount" class="form-control" placeholder="مثال: 500">
-                    <!-- کوئک بٹنز جو اب بار بار دبانے سے رقم جمع (Plus) کرتے جائیں گے -->
-                    <div class="quick-amounts">
-                        <button class="q-btn" onclick="plusAmount(50)">+50</button>
-                        <button class="q-btn" onclick="plusAmount(100)">+100</button>
-                        <button class="q-btn" onclick="plusAmount(500)">+500</button>
-                        <button class="q-btn" onclick="plusAmount(1000)">+1000</button>
+                    <input type="number" id="txAmount" class="input-style" placeholder="یہاں رقم لکھیں...">
+                    <div class="quick-amounts" style="margin-top: 8px;">
+                        <button class="quick-btn" onclick="plusAmount(50)">+50</button>
+                        <button class="quick-btn" onclick="plusAmount(100)">+100</button>
+                        <button class="quick-btn" onclick="plusAmount(500)">+500</button>
+                        <button class="quick-btn" onclick="plusAmount(1000)">+1000</button>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>کیٹیگری یا وجہ منتخب کریں:</label>
-                    <select id="txCategory" class="form-control">
+                    <label>کیٹیگری منتخب کریں:</label>
+                    <select id="txCategory">
                         <option value="گھر کا راشن">🛒 گھر کا راشن</option>
                         <option value="پٹرول / بائیک">⛽ پٹرول / بائیک</option>
                         <option value="بجلی / گیس بل">⚡ بجلی / گیس بل</option>
@@ -514,124 +516,105 @@
 
                 <div class="form-group">
                     <label>کوئی خاص تفصیل (آپشنل):</label>
-                    <input type="text" id="txDetails" class="form-control" placeholder="تفصیل لکھیں...">
+                    <input type="text" id="txDetails" class="input-style" placeholder="تفصیل لکھیں...">
                 </div>
 
-                <div class="btn-grid">
-                    <button class="action-btn btn-income" onclick="addDailyRecord('income')"><i class="fas fa-check"></i> آمدنی</button>
-                    <button class="action-btn btn-expense" onclick="addDailyRecord('expense')"><i class="fas fa-arrow-up"></i> خرچہ</button>
-                    <button class="action-btn btn-savings" onclick="addDailyRecord('savings')"><i class="fas fa-piggy-bank"></i> سیونگ</button>
+                <div class="action-grid">
+                    <button class="btn btn-income" onclick="addDailyRecord('income')"><i class="fas fa-plus"></i> آمدنی</button>
+                    <button class="btn btn-expense" onclick="addDailyRecord('expense')"><i class="fas fa-minus"></i> خرچہ</button>
+                    <button class="btn btn-savings" onclick="addDailyRecord('savings')"><i class="fas fa-piggy-bank"></i> سیونگ</button>
                 </div>
             </div>
 
-            <!-- لسٹ ریکارڈز باکس -->
-            <div class="main-box">
-                <div class="box-title"><i class="fas fa-search"></i> حساب کتاب فلٹر اور تلاش کریں</div>
-                <div class="form-group">
-                    <input type="text" id="searchBar" class="form-control" placeholder="تلاش کریں (جیسے: پٹرول، راشن)..." onkeyup="renderDailyList()">
+            <div class="main-card">
+                <div class="card-title"><span><i class="fas fa-list-ul"></i> لین دین کا ریکارڈ</span></div>
+                <div class="search-wrapper">
+                    <input type="text" id="searchBar" class="input-style" placeholder="تلاش کریں (جیسے: پٹرول، راشن)..." onkeyup="renderDailyList()">
                 </div>
-                <div class="category-tags-container">
+                <div class="tag-cloud">
                     <button class="tag-btn active" onclick="filterDailyCat('all', this)">👁️ سب دیکھیں</button>
                     <button class="tag-btn" onclick="filterDailyCat('پٹرول / بائیک', this)">⛽ پٹرول</button>
                     <button class="tag-btn" onclick="filterDailyCat('گھر کا راشن', this)">🛒 راشن</button>
                     <button class="tag-btn" onclick="filterDailyCat('بجلی / گیس بل', this)">⚡ بلز</button>
                     <button class="tag-btn" onclick="filterDailyCat('کھانا پینا / چائے', this)">🍔 چائے</button>
                 </div>
-                <div style="margin: 10px 0; font-weight: 600; font-size: 13px;"><i class="fas fa-list"></i> لین دین کا ریکارڈ:</div>
-                <div id="dailyRecordsList"></div>
+                <div id="dailyRecordsList" class="record-list"></div>
             </div>
         </div>
-
-        <!-- ================= اسکرین 2: ادھار لسٹ کھاتہ ================= -->
-        <div id="screen-udhaar" class="app-screen">
-            <div class="dashboard-grid">
-                <div class="card borrowed" style="grid-column: span 1;">
-                    <h3><i class="fas fa-hand-holding-usd"></i> ادھار لیا</h3>
-                    <div class="amount" id="totalBorrowed">Rs 0</div>
-                </div>
-                <div class="card lent" style="grid-column: span 1;">
-                    <h3><i class="fas fa-hand-holding-heart"></i> ادھار دیا</h3>
-                    <div class="amount" id="totalLent">Rs 0</div>
-                </div>
-            </div>
-
-            <div class="main-box">
-                <div class="box-title"><i class="fas fa-handshake"></i> نیا ادھار کھاتہ درج کریں</div>
+                <div id="screen-udhaar" class="app-screen">
+            <div class="main-card">
+                <div class="card-title"><span><i class="fas fa-handshake"></i> نیا ادھار کھاتہ درج کریں</span></div>
                 
                 <div class="form-group">
                     <label>بندے یا دکان کا نام:</label>
-                    <input type="text" id="debtPerson" class="form-control" placeholder="نام درج کریں (مثال: احمد، دکاندار)">
+                    <input type="text" id="debtPerson" class="input-style" placeholder="نام درج کریں...">
                 </div>
 
                 <div class="form-group">
                     <label>تاریخ منتخب کریں:</label>
-                    <input type="date" id="debtDate" class="form-control">
+                    <input type="date" id="debtDate" class="input-style">
                 </div>
 
                 <div class="form-group">
                     <label>رقم (روپے):</label>
-                    <input type="number" id="debtAmount" class="form-control" placeholder="مثال: 2000">
+                    <input type="number" id="debtAmount" class="input-style" placeholder="رقم لکھیں...">
                 </div>
 
                 <div class="form-group">
                     <label>لین دین کی قسم:</label>
-                    <div class="wallet-selector" style="grid-template-columns: 1fr 1fr;">
-                        <button class="w-btn active" id="debt-borrowed" style="border-color:#8b5cf6;" onclick="setDebtType('borrowed')">📥 ادھار لیا</button>
-                        <button class="w-btn" id="debt-lent" style="border-color:#ec4899;" onclick="setDebtType('lent')">📤 ادھار دیا</button>
+                    <div class="toggle-group">
+                        <div class="toggle-btn active" id="debt-borrowed" onclick="setDebtType('borrowed')">📥 ادھار لیا</div>
+                        <div class="toggle-btn" id="debt-lent" onclick="setDebtType('lent')">📤 ادھار دیا</div>
                     </div>
                 </div>
 
-                <button class="action-btn" id="debtSubmitBtn" style="width: 100%; background: #4f46e5;" onclick="addDebtRecord()">
-                    <i class="fas fa-save"></i> ادھار کھاتہ میں جمع کریں
+                <button class="btn" style="width: 100%; background: #3b82f6; font-size: 13px; font-weight: bold;" onclick="addDebtRecord()">
+                    <i class="fas fa-save"></i> ادھار کھاتہ محفوظ کریں
                 </button>
             </div>
 
-            <div class="main-box">
-                <div class="box-title"><i class="fas fa-users"></i> باقی ادھار کھاتوں کی تفصیل</div>
-                <div id="udhaarRecordsList"></div>
+            <div class="main-card">
+                <div class="card-title"><span><i class="fas fa-users"></i> باقی ادھار کھاتوں کی تفصیل</span></div>
+                <div id="udhaarRecordsList" class="record-list"></div>
             </div>
         </div>
 
-        <!-- ================= اسکرین 3: ماہانہ رپورٹ ================= -->
         <div id="screen-report" class="app-screen">
-            <div class="main-box">
-                <div class="box-title"><i class="fas fa-chart-pie"></i> ماہانہ خرچوں کا گراف رپورٹ</div>
-                <div class="chart-box">
+            <div class="main-card">
+                <div class="card-title"><span><i class="fas fa-chart-pie"></i> ماہانہ خرچوں کا گراف رپورٹ</span></div>
+                <div style="position: relative; max-height: 230px; display: flex; justify-content: center; align-items: center; padding: 10px;">
                     <canvas id="monthlyPieChart"></canvas>
                 </div>
             </div>
 
-            <div class="main-box">
-                <div class="box-title"><i class="fas fa-table"></i> کیٹیگری وائز ماہانہ حساب</div>
-                <div id="categorySummaryList"></div>
+            <div class="main-card">
+                <div class="card-title"><span><i class="fas fa-table"></i> کیٹیگری وائز ماہانہ حساب</span></div>
+                <div id="categorySummaryList" class="record-list"></div>
             </div>
         </div>
 
-        <!-- ================= اسکرین 4: سیٹنگز اور بیک اب ================= -->
         <div id="screen-settings" class="app-screen">
-            <div class="main-box">
-                <div class="box-title"><i class="fas fa-cog"></i> ڈیٹا کنٹرول اور سیٹنگز</div>
-                <p style="font-size: 13px; margin-bottom: 15px; opacity: 0.8;">یہاں سے آپ اپنے مکمل کھاتے کا بیک اپ لے سکتے ہیں یا تھیم تبدیل کر سکتے ہیں۔</p>
+            <div class="main-card">
+                <div class="card-title"><span><i class="fas fa-cog"></i> ڈیٹا کنٹرول اور سیٹنگز</span></div>
+                <p style="font-size: 12px; margin-bottom: 15px; color: var(--text-muted); line-height: 1.6;">یہاں سے آپ اپنے مکمل کھاتے کا ایکسل بیک اپ فائل ڈاؤنلوڈ کر سکتے ہیں یا مکمل ڈیٹا صاف کر سکتے ہیں۔</p>
                 
-                <button class="action-btn" style="width: 100%; background: #10b981; margin-bottom: 12px;" onclick="exportToExcel()">
+                <button class="btn" style="width: 100%; background: #10b981; margin-bottom: 10px; font-weight: bold;" onclick="exportToExcel()">
                     <i class="fas fa-file-excel"></i> ایکسل (CSV) بیک اپ ڈاؤنلوڈ کریں
                 </button>
 
-                <button class="action-btn" style="width: 100%; background: #ef4444;" onclick="clearAllData()">
+                <button class="btn" style="width: 100%; background: #ef4444; font-weight: bold;" onclick="clearAllData()">
                     <i class="fas fa-trash-alt"></i> مکمل ڈیٹا ری سیٹ کریں
                 </button>
             </div>
         </div>
 
-        <!-- باٹم نیویگیشن ٹیب بار -->
         <div class="bottom-nav">
-            <button class="nav-item active" onclick="switchScreen('daily', this)"><i class="fas fa-calculator"></i>روزانہ کا حساب</button>
+            <button class="nav-item active" onclick="switchScreen('daily', this)"><i class="fas fa-calculator"></i>روزانہ حساب</button>
             <button class="nav-item" onclick="switchScreen('udhaar', this)"><i class="fas fa-users"></i>ادھار لسٹ</button>
             <button class="nav-item" onclick="switchScreen('report', this)"><i class="fas fa-chart-line"></i>ماہانہ رپورٹ</button>
             <button class="nav-item" onclick="switchScreen('settings', this)"><i class="fas fa-cog"></i>سیٹنگز</button>
         </div>
-
-    </div>
+        </div>       
         <script>
         // بنیادی متغیرات (State Variables)
         let dailyRecords = [];
@@ -650,7 +633,7 @@
             // لوکل اسٹوریج سے ڈیٹا لوڈ کریں
             loadData();
             
-            // پرانے ورژنز (v3, v6, v7 وغیرہ) کی تمام ممکنہ کیز سے ڈیٹا ریکوری انجن
+            // پرانے ورژنز کی تمام ممکنہ کیز سے ڈیٹا ریکوری انجن
             migrateOldData();
 
             // اسکرین اپڈیٹ اور چارٹ رینڈر کریں
@@ -690,26 +673,23 @@
             }
         }
 
-        // ڈیٹا لوکل اسٹوریج سے اٹھانے کا فنکشن
+        // لوکل اسٹوریج سے ڈیٹا لوڈ کرنے کا فنکشن
         function loadData() {
             const localDaily = localStorage.getItem('dailyRecords');
             const localDebt = localStorage.getItem('debtRecords');
-            
             if (localDaily) dailyRecords = JSON.parse(localDaily);
             if (localDebt) debtRecords = JSON.parse(localDebt);
         }
 
-        // ڈیٹا لوکل اسٹوریج میں محفوظ کرنے کا فنکشن
+        // لوکل اسٹوریج میں ڈیٹا محفوظ کرنے کا فنکشن
         function saveData() {
             localStorage.setItem('dailyRecords', JSON.stringify(dailyRecords));
             localStorage.setItem('debtRecords', JSON.stringify(debtRecords));
         }
 
-        // 🛡️ پرانا ڈیٹا ریکوری پلس انجن (Smart Migration for v3, v6, v7)
+        // 🛡️ پرانا ڈیٹا ریکوری پلس انجن
         function migrateOldData() {
             let migrated = false;
-
-            // پرانے ورژنز کی وہ تمام کیز جو ڈیٹا سیو کرنے کے لیے استعمال ہوتی رہی ہیں
             const oldKeys = ['records', 'transactions', 'allRecords', 'hisabRecords', 'udhaarRecords'];
             
             oldKeys.forEach(key => {
@@ -719,10 +699,8 @@
                         const parsedData = JSON.parse(oldDataRaw);
                         if (Array.isArray(parsedData)) {
                             parsedData.forEach(oldItem => {
-                                // چیک کریں کہ آیا یہ آئیٹم پہلے سے موجود تو نہیں
                                 const exists = dailyRecords.some(r => r.id === oldItem.id || (r.date === oldItem.date && r.amount === oldItem.amount));
                                 if (!exists) {
-                                    // آئیٹم کا ڈھانچہ سیٹ کریں
                                     dailyRecords.push({
                                         id: oldItem.id || Date.now() + Math.random(),
                                         date: oldItem.date || new Date().toISOString().split('T')[0],
@@ -737,12 +715,11 @@
                             });
                         }
                     } catch (e) {
-                        console.log("پرانی کیز کو ریڈ کرنے میں خرابی:", e);
+                        console.log("Error migrating key:", key, e);
                     }
                 }
             });
 
-            // ادھار کے کالم کو روزانہ کی لسٹ سے الگ کرنے کی لاجک
             dailyRecords = dailyRecords.filter(record => {
                 if (record.category === 'ادھار لیا' || record.type === 'borrowed') {
                     const debtExists = debtRecords.some(d => d.id === record.id);
@@ -777,9 +754,7 @@
                 return true;
             });
 
-            if (migrated) {
-                saveData();
-            }
+            if (migrated) saveData();
         }
 
         // ڈیش بورڈ کارڈز کے ٹوٹل کا حساب لگانے کا انجن
@@ -828,7 +803,8 @@
             document.getElementById('w-cash').classList.remove('active');
             document.getElementById('w-bank').classList.remove('active');
             document.getElementById('w-' + walletType).classList.add('active');
-                    // ➕ پلس پلس رقم والا جادوئی سسٹم (جتنی بار دباؤ رقم پلس ہوتی جائے)
+        }
+         // ➕ پلس پلس رقم والا جادوئی سسٹم
         function plusAmount(val) {
             const inputField = document.getElementById('txAmount');
             const currentVal = parseFloat(inputField.value) || 0;
@@ -868,9 +844,9 @@
 
         let selectedDailyCat = 'all';
         function filterDailyCat(cat, btn) {
-            selectedDailyCat = cat;
             document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            selectedDailyCat = cat;
             renderDailyList();
         }
 
@@ -880,11 +856,9 @@
             listDiv.innerHTML = '';
 
             let filtered = dailyRecords;
-
             if (selectedDailyCat !== 'all') {
                 filtered = filtered.filter(r => r.category === selectedDailyCat);
             }
-
             if (searchVal) {
                 filtered = filtered.filter(r => 
                     r.category.toLowerCase().includes(searchVal) || 
@@ -1015,7 +989,7 @@
             renderDebtList();
         }
 
-        // ================= گراف اور ماہانہ رپورٹ انجن =================
+        // ================= گراف اور رپورٹ انجن =================
         function initChart() {
             const ctx = document.getElementById('monthlyPieChart').getContext('2d');
             const summary = {};
@@ -1119,4 +1093,4 @@
 </html>
 
         
-           
+    
