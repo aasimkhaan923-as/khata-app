@@ -615,7 +615,7 @@
             <button class="nav-item" onclick="switchScreen('settings', this)"><i class="fas fa-cog"></i>سیٹنگز</button>
         </div>
         </div>       
-        <script>
+            <script>
         // بنیادی متغیرات (State Variables)
         let dailyRecords = [];
         let debtRecords = [];
@@ -757,12 +757,10 @@
             if (migrated) saveData();
         }
 
-        // ڈیش بورڈ کارڈز کے ٹوٹل کا حساب لگانے کا انجن
+        // ڈیش بورڈ کارڈز کے ٹوٹل کا حساب لگانے کا انجن (فکسڈ - کریش روکنے کے لیے فالتو آئی ڈی ہٹا دی گئیں)
         function updateDashboard() {
             let totalIncome = 0;
             let totalExpense = 0;
-            let cashBalance = 0;
-            let bankBalance = 0;
             let totalBorrowed = 0;
             let totalLent = 0;
 
@@ -770,15 +768,8 @@
                 const amt = parseFloat(r.amount) || 0;
                 if (r.type === 'income') {
                     totalIncome += amt;
-                    if (r.wallet === 'cash') cashBalance += amt;
-                    if (r.wallet === 'bank') bankBalance += amt;
                 } else if (r.type === 'expense') {
                     totalExpense += amt;
-                    if (r.wallet === 'cash') cashBalance -= amt;
-                    if (r.wallet === 'bank') bankBalance -= amt;
-                } else if (r.type === 'savings') {
-                    if (r.wallet === 'cash') cashBalance -= amt;
-                    if (r.wallet === 'bank') bankBalance -= amt;
                 }
             });
 
@@ -792,8 +783,6 @@
 
             document.getElementById('totalIncome').innerText = 'Rs ' + totalIncome.toLocaleString();
             document.getElementById('totalExpense').innerText = 'Rs ' + totalExpense.toLocaleString();
-            document.getElementById('totalCash').innerText = 'Rs ' + cashBalance.toLocaleString();
-            document.getElementById('totalBank').innerText = 'Rs ' + bankBalance.toLocaleString();
             document.getElementById('totalBorrowed').innerText = 'Rs ' + totalBorrowed.toLocaleString();
             document.getElementById('totalLent').innerText = 'Rs ' + totalLent.toLocaleString();
         }
@@ -804,7 +793,9 @@
             document.getElementById('w-bank').classList.remove('active');
             document.getElementById('w-' + walletType).classList.add('active');
         }
-         // ➕ پلس پلس رقم والا جادوئی سسٹم
+                                                                 </script>
+        <script>
+        // ➕ پلس پلس رقم والا جادوئی سسٹم
         function plusAmount(val) {
             const inputField = document.getElementById('txAmount');
             const currentVal = parseFloat(inputField.value) || 0;
@@ -1055,25 +1046,33 @@
             } catch(e) { document.getElementById('calcScreen').value = 'Error'; }
         }
 
-        // ================= ایکسل (CSV) بیک اپ اور ری سیٹ =================
+        // ================= اسمارٹ موبائل ایکسل (CSV) ڈاؤنلوڈ انجن (فکسڈ اور کریش پروف) =================
         function exportToExcel() {
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Type,Date,Amount,Category/Person,Wallet/Status,Details\n";
+            let csvContent = "ٹائپ (Type),تاریخ (Date),رقم (Amount),کیٹیگری یا نام (Category/Person),حالت (Status),تفصیل (Details)\n";
 
             dailyRecords.forEach(r => {
-                csvContent += `${r.type},${r.date},${r.amount},${r.category},${r.wallet},${r.details || ''}\n`;
+                let statusText = r.wallet === 'cash' ? 'کیش' : 'بینک';
+                csvContent += `${r.type === 'income' ? 'آمدنی' : r.type === 'savings' ? 'سیونگ' : 'خرچہ'},${r.date},${r.amount},${r.category},${statusText},${r.details || ''}\n`;
             });
             debtRecords.forEach(d => {
-                csvContent += `debt-${d.type},${d.date},${d.amount},${d.person},${d.status},--\n`;
+                let typeText = d.type === 'borrowed' ? 'ادھار لیا' : 'ادھار دیا';
+                let statusText = d.status === 'cleared' ? 'چکتا ہو گیا' : 'باقی ہے';
+                csvContent += `${typeText},${d.date},${d.amount},${d.person},${statusText},--\n`;
             });
 
-            const encodedUri = encodeURI(csvContent);
+            // موبائل کریش سے بچنے کے لیے UTF-8 Blob اور BOM کا استعمال
+            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: "text/csv;charset=utf-8;" });
             const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "backup_v8.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            
+            if (navigator.msSaveBlob) { 
+                navigator.msSaveBlob(blob, "Daily_Budget_v8_Backup.csv");
+            } else {
+                link.href = URL.createObjectURL(blob);
+                link.setAttribute("download", "Daily_Budget_v8_Backup.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
 
         function clearAllData() {
@@ -1092,5 +1091,4 @@
 </body>
 </html>
 
-        
     
