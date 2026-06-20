@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حساب کتاب ورژن 8</title>
+    <title>ورژن 8.0</title>
     
     <!-- پریمیم آئیکنز اور خوبصورت اردو فونٹس کی لائبریریز -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* لائٹ موڈ کے پریمیم کلرز */
+        /* ڈیفالٹ لائٹ موڈ کے پریمیم کلرز - اب ایپ پہلے لائٹ موڈ میں کھلے گی */
         :root {
             --bg-color: #f4f6f9;
             --card-bg: #ffffff;
@@ -62,7 +62,7 @@
             gap: 15px;
         }
 
-        /* ہیڈر ورژن 8 */
+        /* ہیڈر ورژن 8.0 */
         .header {
             display: flex;
             justify-content: space-between;
@@ -250,7 +250,7 @@
             border-color: var(--primary-color);
         }
 
-        /* کوئک رقم سلیکشن بٹنز */
+        /* کوئک رقم سلیکشن پلس پلس بٹنز */
         .quick-amounts {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -268,6 +268,10 @@
             font-weight: 700;
             cursor: pointer;
             text-align: center;
+        }
+
+        .q-btn:active {
+            transform: scale(0.95);
         }
 
         /* ایکشن اور والٹ ریڈیو بٹنز */
@@ -405,14 +409,15 @@
         .chart-box { display: flex; justify-content: center; align-items: center; padding: 10px; max-height: 220px; }
     </style>
 </head>
-<body data-theme="dark">
+<!-- لائٹ موڈ ڈیفالٹ کے ساتھ اوپن ہوگا جیسا اسکرین شاٹ 8800.jpg میں لک فکس کرنا تھا -->
+<body data-theme="light">
 
     <div class="container">
         
-        <!-- ہیڈر -->
+        <!-- ہیڈر - اب صرف ورژن 8.0 شارٹ اور سویٹ -->
         <div class="header">
-            <h2><i class="fas fa-wallet"></i> حساب کتاب ورژن 8</h2>
-            <button class="theme-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-sun"></i></button>
+            <h2><i class="fas fa-wallet"></i> ورژن 8.0</h2>
+            <button class="theme-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-moon"></i></button>
         </div>
 
         <!-- ================= اسکرین 1: روزانہ کا حساب ================= -->
@@ -459,7 +464,7 @@
                         <button class="calc-btn" onclick="pressCalc('4')">4</button>
                         <button class="calc-btn" onclick="pressCalc('5')">5</button>
                         <button class="calc-btn" onclick="pressCalc('6')">6</button>
-                        <button class="calc-btn equal" onclick="solveCalc()">=</button>
+                        <button class="calc-btn equal" onclick="solveCalc('=')">=</button>
                         <button class="calc-btn" onclick="pressCalc('1')">1</button>
                         <button class="calc-btn" onclick="pressCalc('2')">2</button>
                         <button class="calc-btn" onclick="pressCalc('3')">3</button>
@@ -483,11 +488,12 @@
                 <div class="form-group">
                     <label>رقم درج کریں (روپے):</label>
                     <input type="number" id="txAmount" class="form-control" placeholder="مثال: 500">
+                    <!-- کوئک بٹنز جو اب بار بار دبانے سے رقم جمع (Plus) کرتے جائیں گے -->
                     <div class="quick-amounts">
-                        <button class="q-btn" onclick="setAmount(50)">50</button>
-                        <button class="q-btn" onclick="setAmount(100)">100</button>
-                        <button class="q-btn" onclick="setAmount(500)">500</button>
-                        <button class="q-btn" onclick="setAmount(1000)">1000</button>
+                        <button class="q-btn" onclick="plusAmount(50)">+50</button>
+                        <button class="q-btn" onclick="plusAmount(100)">+100</button>
+                        <button class="q-btn" onclick="plusAmount(500)">+500</button>
+                        <button class="q-btn" onclick="plusAmount(1000)">+1000</button>
                     </div>
                 </div>
 
@@ -601,7 +607,7 @@
             </div>
         </div>
 
-        <!-- ================= اسکرین 4: سیٹنگز اور بیک اپ ================= -->
+        <!-- ================= اسکرین 4: سیٹنگز اور بیک اب ================= -->
         <div id="screen-settings" class="app-screen">
             <div class="main-box">
                 <div class="box-title"><i class="fas fa-cog"></i> ڈیٹا کنٹرول اور سیٹنگز</div>
@@ -644,7 +650,7 @@
             // لوکل اسٹوریج سے ڈیٹا لوڈ کریں
             loadData();
             
-            // پرانے ورژن کے ڈیٹا کو چیک اور شفٹ (Migrate) کریں
+            // پرانے ورژنز (v3, v6, v7 وغیرہ) کی تمام ممکنہ کیز سے ڈیٹا ریکوری انجن
             migrateOldData();
 
             // اسکرین اپڈیٹ اور چارٹ رینڈر کریں
@@ -669,20 +675,16 @@
 
         // اسکرینز سوئچ کرنے کا پریمیم فنکشن (Tabs Navigation)
         function switchScreen(screenId, btnElement) {
-            // تمام اسکرینز چھپائیں
             document.querySelectorAll('.app-screen').forEach(screen => {
                 screen.classList.remove('active');
             });
-            // مطلوبہ اسکرین دکھائیں
             document.getElementById('screen-' + screenId).classList.add('active');
 
-            // نیویگیشن بٹنز کے ایکٹو کلر کو اپڈیٹ کریں
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.classList.remove('active');
             });
             btnElement.classList.add('active');
 
-            // اگر رپورٹ والی اسکرین ہو تو چارٹ کو دوبارہ تازہ (Refresh) کریں
             if (screenId === 'report') {
                 setTimeout(initChart, 100);
             }
@@ -703,35 +705,74 @@
             localStorage.setItem('debtRecords', JSON.stringify(debtRecords));
         }
 
-        // ورژن 3 یا پرانے ورژنز سے ادھار کا ڈیٹا خودکار شفٹ کرنے کا انجن
+        // 🛡️ پرانا ڈیٹا ریکوری پلس انجن (Smart Migration for v3, v6, v7)
         function migrateOldData() {
             let migrated = false;
+
+            // پرانے ورژنز کی وہ تمام کیز جو ڈیٹا سیو کرنے کے لیے استعمال ہوتی رہی ہیں
+            const oldKeys = ['records', 'transactions', 'allRecords', 'hisabRecords', 'udhaarRecords'];
             
-            // اگر پرانے ورژن کا کوئی ادھار کا ریکارڈ روزانہ کی لسٹ میں پھنسا ہو
+            oldKeys.forEach(key => {
+                const oldDataRaw = localStorage.getItem(key);
+                if (oldDataRaw) {
+                    try {
+                        const parsedData = JSON.parse(oldDataRaw);
+                        if (Array.isArray(parsedData)) {
+                            parsedData.forEach(oldItem => {
+                                // چیک کریں کہ آیا یہ آئیٹم پہلے سے موجود تو نہیں
+                                const exists = dailyRecords.some(r => r.id === oldItem.id || (r.date === oldItem.date && r.amount === oldItem.amount));
+                                if (!exists) {
+                                    // آئیٹم کا ڈھانچہ سیٹ کریں
+                                    dailyRecords.push({
+                                        id: oldItem.id || Date.now() + Math.random(),
+                                        date: oldItem.date || new Date().toISOString().split('T')[0],
+                                        amount: parseFloat(oldItem.amount) || 0,
+                                        category: oldItem.category || 'دیگر خرچے',
+                                        wallet: oldItem.wallet || 'cash',
+                                        details: oldItem.details || '',
+                                        type: oldItem.type || 'expense'
+                                    });
+                                    migrated = true;
+                                }
+                            });
+                        }
+                    } catch (e) {
+                        console.log("پرانی کیز کو ریڈ کرنے میں خرابی:", e);
+                    }
+                }
+            });
+
+            // ادھار کے کالم کو روزانہ کی لسٹ سے الگ کرنے کی لاجک
             dailyRecords = dailyRecords.filter(record => {
                 if (record.category === 'ادھار لیا' || record.type === 'borrowed') {
-                    debtRecords.push({
-                        id: record.id || Date.now() + Math.random(),
-                        person: record.details || 'عام کھاتہ دار',
-                        date: record.date,
-                        amount: record.amount,
-                        type: 'borrowed',
-                        status: 'pending'
-                    });
-                    migrated = true;
-                    return false; // روزانہ کی لسٹ سے نکال دیں
+                    const debtExists = debtRecords.some(d => d.id === record.id);
+                    if (!debtExists) {
+                        debtRecords.push({
+                            id: record.id || Date.now() + Math.random(),
+                            person: record.details || 'عام کھاتہ دار',
+                            date: record.date,
+                            amount: record.amount,
+                            type: 'borrowed',
+                            status: 'pending'
+                        });
+                        migrated = true;
+                    }
+                    return false; 
                 }
                 if (record.category === 'ادھار دیا' || record.type === 'lent') {
-                    debtRecords.push({
-                        id: record.id || Date.now() + Math.random(),
-                        person: record.details || 'عام کھاتہ دار',
-                        date: record.date,
-                        amount: record.amount,
-                        type: 'lent',
-                        status: 'pending'
-                    });
-                    migrated = true;
-                    return false; // روزانہ کی لسٹ سے نکال دیں
+                    const debtExists = debtRecords.some(d => d.id === record.id);
+                    if (!debtExists) {
+                        debtRecords.push({
+                            id: record.id || Date.now() + Math.random(),
+                            person: record.details || 'عام کھاتہ دار',
+                            date: record.date,
+                            amount: record.amount,
+                            type: 'lent',
+                            status: 'pending'
+                        });
+                        migrated = true;
+                    }
+                    return false;
                 }
                 return true;
             });
@@ -750,7 +791,6 @@
             let totalBorrowed = 0;
             let totalLent = 0;
 
-            // روزانہ حساب کتاب کا کیلکولیشن
             dailyRecords.forEach(r => {
                 const amt = parseFloat(r.amount) || 0;
                 if (r.type === 'income') {
@@ -762,13 +802,11 @@
                     if (r.wallet === 'cash') cashBalance -= amt;
                     if (r.wallet === 'bank') bankBalance -= amt;
                 } else if (r.type === 'savings') {
-                    // سیونگز کو بھی محفوظ کیا جاتا ہے
                     if (r.wallet === 'cash') cashBalance -= amt;
                     if (r.wallet === 'bank') bankBalance -= amt;
                 }
             });
 
-            // ادھار کھاتہ کا الگ کیلکولیشن (صرف پینڈنگ ادھار کا ٹوٹل شو ہوگا)
             debtRecords.forEach(d => {
                 const amt = parseFloat(d.amount) || 0;
                 if (d.status !== 'cleared') {
@@ -777,7 +815,6 @@
                 }
             });
 
-            // فرنٹ اینڈ کارڈز اپڈیٹ کریں
             document.getElementById('totalIncome').innerText = 'Rs ' + totalIncome.toLocaleString();
             document.getElementById('totalExpense').innerText = 'Rs ' + totalExpense.toLocaleString();
             document.getElementById('totalCash').innerText = 'Rs ' + cashBalance.toLocaleString();
@@ -786,16 +823,16 @@
             document.getElementById('totalLent').innerText = 'Rs ' + totalLent.toLocaleString();
         }
 
-        // روزانہ کھاتہ والٹ اور کوئک بٹنز کنٹرولز
         function setWallet(walletType) {
             currentWallet = walletType;
             document.getElementById('w-cash').classList.remove('active');
             document.getElementById('w-bank').classList.remove('active');
             document.getElementById('w-' + walletType).classList.add('active');
-        }
-
-        function setAmount(val) {
-            document.getElementById('txAmount').value = val;
+                    // ➕ پلس پلس رقم والا جادوئی سسٹم (جتنی بار دباؤ رقم پلس ہوتی جائے)
+        function plusAmount(val) {
+            const inputField = document.getElementById('txAmount');
+            const currentVal = parseFloat(inputField.value) || 0;
+            inputField.value = currentVal + val;
         }
 
         // نیا روزانہ کا ریکارڈ جمع کریں
@@ -825,12 +862,10 @@
             updateDashboard();
             renderDailyList();
             
-            // فارم صاف کریں
             document.getElementById('txAmount').value = '';
             document.getElementById('txDetails').value = '';
         }
 
-        // روزانہ کی لسٹ رینڈر کرنے کا فلٹر انجن
         let selectedDailyCat = 'all';
         function filterDailyCat(cat, btn) {
             selectedDailyCat = cat;
@@ -864,9 +899,8 @@
 
             filtered.forEach(r => {
                 let badgeColor = '#10b981';
-                let typeText = 'آمدنی';
-                if (r.type === 'expense') { badgeColor = '#ef4444'; typeText = 'خرچہ'; }
-                if (r.type === 'savings') { badgeColor = '#f59e0b'; typeText = 'سیونگ'; }
+                if (r.type === 'expense') badgeColor = '#ef4444';
+                if (r.type === 'savings') badgeColor = '#f59e0b';
 
                 const item = document.createElement('div');
                 item.className = 'record-item';
@@ -919,7 +953,7 @@
                 date: date,
                 amount: parseFloat(amount),
                 type: currentDebtType,
-                status: 'pending' // پینڈنگ کھاتہ
+                status: 'pending'
             };
 
             debtRecords.unshift(newDebt);
@@ -927,12 +961,10 @@
             updateDashboard();
             renderDebtList();
 
-            // فارم صاف کریں
             document.getElementById('debtPerson').value = '';
             document.getElementById('debtAmount').value = '';
         }
 
-        // ادھار لسٹ کی لائیو اپڈیٹنگ اور "مارک ایز کلیئر" بٹن
         function renderDebtList() {
             const listDiv = document.getElementById('udhaarRecordsList');
             listDiv.innerHTML = '';
@@ -966,7 +998,6 @@
             });
         }
 
-        // ادھار کو کلیئر کرنے کا فنکشن (جب پیسے مل جائیں یا دے دیے جائیں)
         function clearDebt(id) {
             debtRecords = debtRecords.map(d => {
                 if (d.id === id) d.status = 'cleared';
@@ -987,8 +1018,6 @@
         // ================= گراف اور ماہانہ رپورٹ انجن =================
         function initChart() {
             const ctx = document.getElementById('monthlyPieChart').getContext('2d');
-            
-            // کیٹیگری وائز ڈیٹا اکٹھا کریں
             const summary = {};
             let hasData = false;
 
@@ -999,7 +1028,6 @@
                 }
             });
 
-            // فرنٹ اینڈ پر تفصیلی لسٹ بھی رینڈر کریں
             const summaryDiv = document.getElementById('categorySummaryList');
             summaryDiv.innerHTML = '';
             
@@ -1015,7 +1043,6 @@
 
             if (myChart) myChart.destroy();
 
-            // اگر ڈیٹا نہ ہو تو خالی پائی چارٹ نہ دکھائیں
             if (!hasData) {
                 summaryDiv.innerHTML = '<p style="text-align:center; font-size:12px; opacity:0.5; padding:10px;">خرچوں کا گراف بنانے کے لیے پہلے کوئی خرچہ درج کریں۔</p>';
                 return;
@@ -1050,7 +1077,7 @@
             try {
                 const res = eval(document.getElementById('calcScreen').value);
                 document.getElementById('calcScreen').value = res;
-                document.getElementById('txAmount').value = res; // رزلٹ کو براہ راست رقم والے ان پٹ میں بھیجیں
+                document.getElementById('txAmount').value = res;
             } catch(e) { document.getElementById('calcScreen').value = 'Error'; }
         }
 
@@ -1069,7 +1096,7 @@
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "hisab_kitab_v8_backup.csv");
+            link.setAttribute("download", "backup_v8.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -1090,3 +1117,6 @@
     </script>
 </body>
 </html>
+
+        
+           
