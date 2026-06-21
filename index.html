@@ -1087,6 +1087,52 @@
                 alert('ایپ کا ڈیٹا کامیابی سے ری سیٹ ہو گیا ہے!');
             }
         }
+          // 💰 بقایا رقم (کیش اور بینک بیلنس) کا نیا اسمارٹ فارمولا
+        function updateDashboard() {
+            let totalIncome = 0;
+            let totalExpense = 0;
+            let cashBalance = 0;
+            let bankBalance = 0;
+            let totalBorrowed = 0;
+            let totalLent = 0;
+
+            // روزانہ کے ریکارڈز کا حساب (آمدنی جمع ہوگی، خرچہ اور سیونگ مائنس ہوں گے)
+            dailyRecords.forEach(r => {
+                const amt = parseFloat(r.amount) || 0;
+                if (r.type === 'income') {
+                    totalIncome += amt;
+                    if (r.wallet === 'cash') cashBalance += amt;
+                    if (r.wallet === 'bank') bankBalance += amt;
+                } else if (r.type === 'expense') {
+                    totalExpense += amt;
+                    if (r.wallet === 'cash') cashBalance -= amt;
+                    if (r.wallet === 'bank') bankBalance -= amt;
+                } else if (r.type === 'savings') {
+                    if (r.wallet === 'cash') cashBalance -= amt;
+                    if (r.wallet === 'bank') bankBalance -= amt;
+                }
+            });
+
+            // ادھار کھاتوں کا حساب
+            debtRecords.forEach(d => {
+                const amt = parseFloat(d.amount) || 0;
+                if (d.status !== 'cleared') {
+                    if (d.type === 'borrowed') totalBorrowed += amt;
+                    if (d.type === 'lent') totalLent += amt;
+                }
+            });
+
+            // کارڈز کو لائیو اپڈیٹ کرنا
+            if(document.getElementById('totalIncome')) document.getElementById('totalIncome').innerText = 'Rs ' + totalIncome.toLocaleString();
+            if(document.getElementById('totalExpense')) document.getElementById('totalExpense').innerText = 'Rs ' + totalExpense.toLocaleString();
+            if(document.getElementById('totalBorrowed')) document.getElementById('totalBorrowed').innerText = 'Rs ' + totalBorrowed.toLocaleString();
+            if(document.getElementById('totalLent')) document.getElementById('totalLent').innerText = 'Rs ' + totalLent.toLocaleString();
+            
+            // بقایا رقم (کیش اور بینک) لائیو دکھانے کے لیے
+            if(document.getElementById('totalCash')) document.getElementById('totalCash').innerText = 'Rs ' + cashBalance.toLocaleString();
+            if(document.getElementById('totalBank')) document.getElementById('totalBank').innerText = 'Rs ' + bankBalance.toLocaleString();
+        }
+            
     </script>
 </body>
 </html>
