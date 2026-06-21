@@ -442,17 +442,19 @@
                 <div class="amount" id="totalLent">Rs 0</div>
             </div>
         </div>
-        <!-- 💰 کُل بقایا رقم اور سیونگ کے دو خوبصورت چھوٹے کارڈز -->
-        <div class="stat-card total-remaining" style="border-left: 5px solid #10b981;">
-            <h3><i class="fas fa-wallet"></i> کُل بقایا رقم</h3>
-            <div class="amount" id="totalCash">Rs 0</div>
-            <!-- جاوا اسکرپٹ کے کریش کو روکنے کے لیے ایک خفیہ خانہ -->
-            <div id="totalBank" style="display: none;">Rs 0</div>
-        </div>
+              <!-- 💰 کُل بقایا رقم اور سیونگ کے پریمیم چھوٹے آمنے سامنے کارڈز -->
+        <div style="display: flex; gap: 12px; margin-bottom: 15px; width: 100%;">
+            <div class="stat-card total-remaining" style="border-left: 5px solid #10b981; margin: 0; flex: 1; padding: 10px;">
+                <h3 style="font-size: 13px;"><i class="fas fa-wallet"></i> کُل بقایا رقم</h3>
+                <div class="amount" id="totalCash" style="font-size: 18px; margin-top: 5px;">Rs 0</div>
+                <!-- جاوا اسکرپٹ کے کریش کو روکنے کے لیے خفیہ خانہ -->
+                <div id="totalBank" style="display: none;">Rs 0</div>
+            </div>
 
-        <div class="stat-card savings-card" style="border-left: 5px solid #f59e0b;">
-            <h3><i class="fas fa-piggy-bank"></i> کُل سیونگز</h3>
-            <div class="amount" id="totalSavingsCard">Rs 0</div>
+            <div class="stat-card savings-card" style="border-left: 5px solid #f59e0b; margin: 0; flex: 1; padding: 10px;">
+                <h3 style="font-size: 13px;"><i class="fas fa-piggy-bank"></i> کُل سیونگز</h3>
+                <div class="amount" id="totalSavingsCard" style="font-size: 18px; margin-top: 5px;">Rs 0</div>
+            </div>
         </div>
             
         <div id="screen-daily" class="app-screen active">
