@@ -442,15 +442,14 @@
                 <div class="amount" id="totalLent">Rs 0</div>
             </div>
         </div>
-                    <!-- 💰 بقایا رقم (کیش اور بینک) کے نئے اسمارٹ کارڈز -->
-        <div class="stat-card cash-remaining" style="border-left: 5px solid #10b981;">
-            <h3><i class="fas fa-wallet"></i> کیش بقایا (جیب)</h3>
+            <!-- 💰 صرف ایک چھوٹا اور خوبصورت کُل بقایا رقم کا کارڈ -->
+        <div class="stat-card total-remaining" style="border-left: 5px solid #10b981; grid-column: span 2;">
+            <h3><i class="fas fa-wallet"></i> کُل بقایا رقم</h3>
             <div class="amount" id="totalCash">Rs 0</div>
+            <!-- جاوا اسکرپٹ کے کریش کو روکنے کے لیے ایک خفیہ پوشیدہ خانہ -->
+            <div id="totalBank" style="display: none;">Rs 0</div>
         </div>
-        <div class="stat-card bank-remaining" style="border-left: 5px solid #3b82f6;">
-            <h3><i class="fas fa-university"></i> بینک / ایزی پیسہ</h3>
-            <div class="amount" id="totalBank">Rs 0</div>
-        </div>
+            
 
         <div id="screen-daily" class="app-screen active">
             <div class="main-card">
