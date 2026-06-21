@@ -450,6 +450,10 @@
                 <!-- جاوا اسکرپٹ کے کریش کو روکنے کے لیے خفیہ خانہ -->
                 <div id="totalBank" style="display: none;">Rs 0</div>
             </div>
+                    <div id="budgetAlert" style="display: none; background: #fee2e2; color: #991b1b; border-right: 5px solid #ef4444; padding: 12px; border-radius: 12px; text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 14px; width: 100%;">
+            ⚠️ عاصم بھائی، مہینے کا بجٹ ختم ہونے والا ہے! ہاتھ ہولا رکھیں!
+                    </div>
+            
 
             <div class="stat-card savings-card" style="border-left: 5px solid #f59e0b; margin: 0; flex: 1; padding: 10px;">
                 <h3 style="font-size: 13px;"><i class="fas fa-piggy-bank"></i> کُل سیونگز</h3>
@@ -1195,6 +1199,30 @@
             // سیونگ والے نئے خانے میں رقم بھیجنے کے لیے
             if(document.getElementById('totalSavingsCard')) document.getElementById('totalSavingsCard').innerText = 'Rs ' + totalSavings.toLocaleString();
         }
+                   // 🚨 بجٹ وارننگ لاجک (حد: 40,000 روپے)
+        const budgetLimit = 40000; 
+        const alertBox = document.getElementById('budgetAlert');
+        if (alertBox) {
+            if (totalExpense >= budgetLimit * 0.8) {
+                alertBox.style.display = 'block';
+            } else {
+                alertBox.style.display = 'none';
+            }
+        }
+
+        // 🌗 آٹو موبائل سسٹم ڈارک موڈ انجن
+        const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        function applySystemTheme(e) {
+            if (!localStorage.getItem('theme')) {
+                if (e.matches) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            }
+        }
+        systemThemeQuery.addListener(applySystemTheme);
+        applySystemTheme(systemThemeQuery);
             
     </script>
 </body>
