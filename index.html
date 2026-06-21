@@ -1223,6 +1223,14 @@
         }
         systemThemeQuery.addListener(applySystemTheme);
         applySystemTheme(systemThemeQuery);
+               // 🌗 زبردستی آٹو سسٹم تھیم چیکر (فکس کوڈ)
+        if (!localStorage.getItem('theme')) {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        }
             
     </script>
 </body>
