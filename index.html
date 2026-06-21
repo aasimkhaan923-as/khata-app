@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ورژن 8.0</title>
+    <title>ورژن8.1</title>
     <!-- پریمیم فونٹس اور آئیکنز لنکس -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;600;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -442,15 +442,19 @@
                 <div class="amount" id="totalLent">Rs 0</div>
             </div>
         </div>
-            <!-- 💰 صرف ایک چھوٹا اور خوبصورت کُل بقایا رقم کا کارڈ -->
-        <div class="stat-card total-remaining" style="border-left: 5px solid #10b981; grid-column: span 2;">
+        <!-- 💰 کُل بقایا رقم اور سیونگ کے دو خوبصورت چھوٹے کارڈز -->
+        <div class="stat-card total-remaining" style="border-left: 5px solid #10b981;">
             <h3><i class="fas fa-wallet"></i> کُل بقایا رقم</h3>
             <div class="amount" id="totalCash">Rs 0</div>
-            <!-- جاوا اسکرپٹ کے کریش کو روکنے کے لیے ایک خفیہ پوشیدہ خانہ -->
+            <!-- جاوا اسکرپٹ کے کریش کو روکنے کے لیے ایک خفیہ خانہ -->
             <div id="totalBank" style="display: none;">Rs 0</div>
         </div>
-            
 
+        <div class="stat-card savings-card" style="border-left: 5px solid #f59e0b;">
+            <h3><i class="fas fa-piggy-bank"></i> کُل سیونگز</h3>
+            <div class="amount" id="totalSavingsCard">Rs 0</div>
+        </div>
+            
         <div id="screen-daily" class="app-screen active">
             <div class="main-card">
                 <div class="card-title">
@@ -1139,6 +1143,55 @@
             // بقایا رقم (کیش اور بینک) لائیو دکھانے کے لیے
             if(document.getElementById('totalCash')) document.getElementById('totalCash').innerText = 'Rs ' + cashBalance.toLocaleString();
             if(document.getElementById('totalBank')) document.getElementById('totalBank').innerText = 'Rs ' + bankBalance.toLocaleString();
+        }
+                   // 📊 نیا ڈیش بورڈ لاجک جو بقایا رقم اور سیونگز دونوں کو الگ کیلکولیٹ کرتا ہے
+        function updateDashboard() {
+            let totalIncome = 0;
+            let totalExpense = 0;
+            let cashBalance = 0;
+            let bankBalance = 0;
+            let totalBorrowed = 0;
+            let totalLent = 0;
+            let totalSavings = 0; // سیونگ کا نیا میٹر
+
+            dailyRecords.forEach(r => {
+                const amt = parseFloat(r.amount) || 0;
+                if (r.type === 'income') {
+                    totalIncome += amt;
+                    if (r.wallet === 'cash') cashBalance += amt;
+                    if (r.wallet === 'bank') bankBalance += amt;
+                } else if (r.type === 'expense') {
+                    totalExpense += amt;
+                    if (r.wallet === 'cash') cashBalance -= amt;
+                    if (r.wallet === 'bank') bankBalance -= amt;
+                } else if (r.type === 'savings') {
+                    totalSavings += amt; // یہاں کل سیونگ جمع ہوگی
+                    if (r.wallet === 'cash') cashBalance -= amt;
+                    if (r.wallet === 'bank') bankBalance -= amt;
+                }
+            });
+
+            debtRecords.forEach(d => {
+                const amt = parseFloat(d.amount) || 0;
+                if (d.status !== 'cleared') {
+                    if (d.type === 'borrowed') totalBorrowed += amt;
+                    if (d.type === 'lent') totalLent += amt;
+                }
+            });
+
+            // کارڈز کو لائیو اپڈیٹ کرنا
+            if(document.getElementById('totalIncome')) document.getElementById('totalIncome').innerText = 'Rs ' + totalIncome.toLocaleString();
+            if(document.getElementById('totalExpense')) document.getElementById('totalExpense').innerText = 'Rs ' + totalExpense.toLocaleString();
+            if(document.getElementById('totalBorrowed')) document.getElementById('totalBorrowed').innerText = 'Rs ' + totalBorrowed.toLocaleString();
+            if(document.getElementById('totalLent')) document.getElementById('totalLent').innerText = 'Rs ' + totalLent.toLocaleString();
+            
+            // کُل بقایا رقم کا فائنل بیلنس (کیش + بینک مائنس خرچے و سیونگ)
+            let finalWalletBalance = cashBalance + bankBalance;
+            if(document.getElementById('totalCash')) document.getElementById('totalCash').innerText = 'Rs ' + finalWalletBalance.toLocaleString();
+            if(document.getElementById('totalBank')) document.getElementById('totalBank').innerText = 'Rs ' + bankBalance.toLocaleString();
+            
+            // سیونگ والے نئے خانے میں رقم بھیجنے کے لیے
+            if(document.getElementById('totalSavingsCard')) document.getElementById('totalSavingsCard').innerText = 'Rs ' + totalSavings.toLocaleString();
         }
             
     </script>
