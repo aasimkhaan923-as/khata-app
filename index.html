@@ -136,45 +136,57 @@
     </style>
 </head>
     <style>
-        /* ڈیش بورڈ کارڈز اور گرڈ سسٹم */
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            padding: 15px;
-        }
+        /* 🎨 عاصم بھائی کا فکسڈ ڈیش بورڈ کارڈز اور گرڈ سسٹم */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px !important;
+    padding: 15px;
+}
 
-        .stat-card {
-            background: var(--card-bg);
-            padding: 14px;
-            border-radius: 14px;
-            border-top: 4px solid #3b82f6;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+.stat-card {
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 10px 8px !important;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 
-        .stat-card.expense { border-top-color: #ef4444; }
-        .stat-card.income { border-top-color: #10b981; }
-        .stat-card.borrowed { border-top-color: #8b5cf6; }
-        .stat-card.lent { border-top-color: #ec4899; }
+/* لکھائی اور نمبروں کو سفید اور بولڈ کرنا */
+.stat-card p, 
+.stat-card h3, 
+.stat-card .amount,
+.stat-card i {
+    color: #ffffff !important;
+    font-weight: bold !important;
+    margin: 0 !important;
+}
 
-        .stat-card h3 {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+.stat-card p { font-size: 13px !important; }
+.stat-card h3, .stat-card .amount { font-size: 16px !important; }
 
-        .stat-card .amount {
-            font-size: 18px;
-            font-weight: 700;
-            font-family: 'Poppins', sans-serif;
-            margin-top: 2px;
-        }
+/* 🟢 ہرا رنگ: آمدنی، ادھار دیا، اور سیونگز */
+.stat-card.income, 
+.stat-card.lent,
+.stat-card:nth-child(5) { 
+    background: #22c55e !important; 
+}
+
+/* 🔴 سرخ رنگ: خرچہ اور ادھار لیا */
+.stat-card.expense, 
+.stat-card.borrowed { 
+    background: #ef4444 !important; 
+}
+
+/* 🟠 نارنجی رنگ: کُل بقایا رقم */
+.stat-card:nth-child(6) { 
+    background: #f97316 !important; 
+}
+        
+           
 
         /* مین اسکرین کنٹینر اور کارڈ فارمیٹس */
         .app-screen {
