@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ورژن 8.2</title>
+    <title>ورژن 8.3</title>
     <!-- پریمیم فونٹس اور آئیکنز لنکس -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;600;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-    /* کارڈز کو سمارٹ اور چھوٹے کرنے کی سیٹنگ */
+    /* 🎨 عاصم بھائی کا فائنل کلین کوڈ */
 .stat-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -22,30 +22,32 @@
     border-radius: 12px !important;
     padding: 8px !important;
     text-align: center;
+    color: #ffffff !important;
 }
 
-/* رنگ سیٹ کرنے کے لیے سادہ طریقہ */
-/* 🟢 ہرا رنگ */
-.stat-card:nth-child(2), .stat-card:nth-child(3), .stat-card:nth-child(5) {
-    background: #22c55e !important;
-}
-
-/* 🔴 سرخ رنگ */
-.stat-card:nth-child(1), .stat-card:nth-child(4) {
-    background: #ef4444 !important;
-}
-
-/* 🟠 نارنجی رنگ */
-.stat-card:nth-child(6) {
-    background: #f97316 !important;
-}
-
-/* لکھائی کو سفید اور بولڈ کرنا */
 .stat-card p, .stat-card h3, .stat-card i {
     color: #ffffff !important;
     font-weight: bold !important;
+    margin: 0 !important;
 }
-        
+
+/* 🟢 ہرا (آمدنی، ادھار دیا، سیونگز) */
+.stat-card:has(p:contains("آمدنی")),
+.stat-card:has(p:contains("ادھار دیا")),
+.stat-card:has(p:contains("سیونگز")) {
+    background: #22c55e !important;
+}
+
+/* 🔴 سرخ (خرچہ، ادھار لیا) */
+.stat-card:has(p:contains("خرچہ")),
+.stat-card:has(p:contains("ادھار لیا")) {
+    background: #ef4444 !important;
+}
+
+/* 🟠 نارنجی (بقایا) */
+.stat-card:has(p:contains("بقایا")) {
+    background: #f97316 !important;
+}
         
         :root {
             --bg-color: #f1f5f9;
@@ -457,7 +459,7 @@
         <div class="app-container">
         
         <div class="top-bar">
-            <div class="app-title"><i class="fas fa-wallet"></i> ورژن 8.2</div>
+            <div class="app-title"><i class="fas fa-wallet"></i> ورژن 8.3</div>
             <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-moon"></i></button>
         </div>
         <!-- 🚨 بجٹ وارننگ کی اسمارٹ الرٹ پٹی -->
