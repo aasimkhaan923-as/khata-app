@@ -10,46 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-    /* 🎨 عاصم بھائی کا فائنل کلین کوڈ */
-.stat-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px !important;
-}
-
-.stat-card {
-    border: none !important;
-    border-radius: 12px !important;
-    padding: 8px !important;
-    text-align: center;
-    color: #ffffff !important;
-}
-
-.stat-card p, .stat-card h3, .stat-card i {
-    color: #ffffff !important;
-    font-weight: bold !important;
-    margin: 0 !important;
-}
-
-/* 🟢 ہرا (آمدنی، ادھار دیا، سیونگز) */
-.stat-card:has(p:contains("آمدنی")),
-.stat-card:has(p:contains("ادھار دیا")),
-.stat-card:has(p:contains("سیونگز")) {
-    background: #22c55e !important;
-}
-
-/* 🔴 سرخ (خرچہ، ادھار لیا) */
-.stat-card:has(p:contains("خرچہ")),
-.stat-card:has(p:contains("ادھار لیا")) {
-    background: #ef4444 !important;
-}
-
-/* 🟠 نارنجی (بقایا) */
-.stat-card:has(p:contains("بقایا")) {
-    background: #f97316 !important;
-}
-        
-        :root {
+            :root {
             --bg-color: #f1f5f9;
             --card-bg: #ffffff;
             --text-color: #2b2d42;
@@ -168,26 +129,28 @@
 .stat-card p { font-size: 13px !important; }
 .stat-card h3, .stat-card .amount { font-size: 16px !important; }
 
-/* 🟢 ہرا رنگ: آمدنی، ادھار دیا، اور سیونگز */
-.stat-card.income, 
-.stat-card.lent,
-.stat-card.savings,
-.stat-card:has(p:contains("سیونگز")) { 
-    background: #22c55e !important; 
+/* 🟢 ہرا رنگ: دوسرا کارڈ (آمدنی) اور تیسرا کارڈ (ادھار دیا) */
+.stat-grid .stat-card:nth-of-type(2),
+.stat-grid .stat-card:nth-of-type(3) {
+    background: #22c55e !important;
 }
 
-/* 🔴 سرخ رنگ: خرچہ اور ادھار لیا */
-.stat-card.expense, 
-.stat-card.borrowed { 
-    background: #ef4444 !important; 
+/* 🔴 سرخ رنگ: پہلا کارڈ (خرچہ) اور چوتھا کارڈ (ادھار لیا) */
+.stat-grid .stat-card:nth-of-type(1),
+.stat-grid .stat-card:nth-of-type(4) {
+    background: #ef4444 !important;
 }
 
-/* 🟠 نارنجی رنگ: کُل بقایا رقم */
-.stat-card.balance,
-.stat-card.remaining,
-.stat-card:has(p:contains("بقایا")) { 
-    background: #f97316 !important; 
-        }
+/* 🟢 ہرا رنگ: پانچواں کارڈ (کُل سیونگز) */
+.stat-grid .stat-card:nth-of-type(5) {
+    background: #22c55e !important;
+}
+
+/* 🟠 نارنجی رنگ: چھٹا کارڈ (کُل بقایا رقم) */
+.stat-grid .stat-card:nth-of-type(6) {
+    background: #f97316 !important;
+}
+        
         
 
         /* مین اسکرین کنٹینر اور کارڈ فارمیٹس */
