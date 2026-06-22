@@ -171,7 +171,8 @@
 /* 🟢 ہرا رنگ: آمدنی، ادھار دیا، اور سیونگز */
 .stat-card.income, 
 .stat-card.lent,
-.stat-card:nth-child(5) { 
+.stat-card.savings,
+.stat-card:has(p:contains("سیونگز")) { 
     background: #22c55e !important; 
 }
 
@@ -182,11 +183,12 @@
 }
 
 /* 🟠 نارنجی رنگ: کُل بقایا رقم */
-.stat-card:nth-child(6) { 
+.stat-card.balance,
+.stat-card.remaining,
+.stat-card:has(p:contains("بقایا")) { 
     background: #f97316 !important; 
-}
+        }
         
-           
 
         /* مین اسکرین کنٹینر اور کارڈ فارمیٹس */
         .app-screen {
