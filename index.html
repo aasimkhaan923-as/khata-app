@@ -41,6 +41,47 @@
     font-size: 20px !important;
     margin-bottom: 4px !important;
 }
+        /* 🎨 عاصم بھائی کا فل کلر کارڈز انجن */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+/* سب کارڈز کی مشترکہ سیٹنگ (لکھائی سفید اور خوبصورت شیڈو) */
+.stat-grid .stat-card {
+    border: none !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.12) !important;
+    border-radius: 16px !important;
+    padding: 15px !important;
+    color: #ffffff !important;
+    transition: transform 0.3s ease;
+}
+
+.stat-grid .stat-card p, 
+.stat-grid .stat-card h3,
+.stat-grid .stat-card i {
+    color: #ffffff !important;
+    font-weight: bold !important;
+}
+
+/* 🟢 ہرا رنگ: آمدنی، ادھار دیا، اور سیونگز */
+.stat-grid .stat-card.income,
+.stat-grid .stat-card:nth-child(3), /* کُل ادھار دیا */
+.stat-grid .stat-card:nth-child(5)  /* کُل سیونگز */ {
+    background: linear-gradient(135deg, #22c55e, #15803d) !important;
+}
+
+/* 🔴 سرخ رنگ: خرچہ اور ادھار لیا */
+.stat-grid .stat-card.expense,
+.stat-grid .stat-card:nth-child(4) /* کُل ادھار لیا */ {
+    background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+}
+
+/* 🟠 نارنجی رنگ: کُل بقایا رقم */
+.stat-grid .stat-card:nth-child(6) /* کُل بقایا رقم */ {
+    background: linear-gradient(135deg, #f97316, #c2410c) !important;
+}
         
         :root {
             --bg-color: #f1f5f9;
