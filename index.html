@@ -106,38 +106,42 @@
 }
 
 .stat-card {
-    border: none !important;
-    border-radius: 12px !important;
-    padding: 10px 8px !important;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    background: var(--card-bg);
+    padding: 14px;
+    border-radius: 14px;
+    border-top: 4px solid #3b82f6;
+    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
     gap: 4px;
+    text-align: center;
 }
 
-/* لکھائی اور نمبروں کو سفید اور بولڈ کرنا */
-.stat-card p, 
+/* لکھائی کا رنگ واپس گہرا اور نارمل کرنا */
+.stat-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
 .stat-card h3, 
-.stat-card .amount,
-.stat-card i {
-    color: #ffffff !important;
-    font-weight: bold !important;
-    margin: 0 !important;
+.stat-card .amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-color) !important;
+    margin: 0;
 }
 
-.stat-card p { font-size: 13px !important; }
-.stat-card h3, .stat-card .amount { font-size: 16px !important; }
-
-/* 📋 ایپ کا اصل پرانا کارڈ ڈیزائن */
+/* 🎨 اوپر والی پتلی لکیروں کے اصل رنگ */
 .stat-card.expense { border-top-color: #ef4444 !important; }
 .stat-card.income { border-top-color: #22c55e !important; }
 .stat-card.borrowed { border-top-color: #a855f7 !important; }
 .stat-card.lent { border-top-color: #ec4899 !important; }
 
-/* نیچے والے دونوں کارڈز کے اصل پرانے رنگ */
+/* نیچے والے دونوں کارڈز کے پرانے رنگ */
 .stat-grid .stat-card:nth-child(5) { border-top-color: #f59e0b !important; }
 .stat-grid .stat-card:nth-child(6) { border-top-color: #3b82f6 !important; }
+        
         
         
         
